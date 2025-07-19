@@ -30,32 +30,43 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="pesquisaAvancadaLivros1" min="-2" pref="223" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="tabelaLivros" max="32767" attributes="0"/>
-                          <Component id="sinopseLivro2" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="acoesLivro1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                              <Component id="qntLabel" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
-                              <Component id="voltarButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="proximoButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <Component id="pesquisarPanel1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="titulo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="usuarioPanel1" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="pesquisarPanel1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="pesquisaAvancadaLivros1" min="-2" pref="223" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="sinopseLivro2" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="acoesLivro1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                                      <Component id="qntLabel" pref="52" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="124" max="-2" attributes="0"/>
+                                      <Component id="voltarButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="proximoButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="detalhesAutor1" min="-2" pref="301" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <Component id="tabelaLivros" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -85,9 +96,12 @@
                           </Group>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="sinopseLivro2" min="-2" pref="120" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="sinopseLivro2" pref="134" max="32767" attributes="0"/>
+                          <Component id="detalhesAutor1" pref="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Component id="pesquisaAvancadaLivros1" max="32767" attributes="0"/>
+                  <Component id="pesquisaAvancadaLivros1" pref="464" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -112,6 +126,9 @@
     <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.SinopseLivro" name="sinopseLivro2">
     </Component>
     <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros" name="tabelaLivros">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tabelaLivros = new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros(){&#xa;    @Override&#xa;    protected void onItemDestacado(Livro item) {&#xa;        onItemDestacadoLivros(item);&#xa;    };&#xa;};"/>
+      </AuxValues>
     </Component>
     <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.AcoesLivro" name="acoesLivro1">
     </Component>
@@ -135,6 +152,8 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="voltarButtonActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.DetalhesAutor" name="detalhesAutor1">
     </Component>
   </SubComponents>
 </Form>

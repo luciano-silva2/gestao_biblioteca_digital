@@ -1,8 +1,9 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.livros;
 
-import br.edu.ifpb.gestaobibliotecadigital.filters.EmprestimoFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
+import br.edu.ifpb.gestaobibliotecadigital.services.impl.LivroService;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
+import br.edu.ifpb.gestaobibliotecadigital.utils.Paginacao;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -12,8 +13,8 @@ import javax.swing.JTextField;
 public class PesquisaAvancadaLivros extends javax.swing.JPanel {
 
     public final UpdateObserver events = new UpdateObserver();
-//    private EmprestimoFiltro filtro = new EmprestimoFiltro();
     private LivroFiltro filtro = new LivroFiltro();
+    private LivroService livroService = new LivroService();
 
     public PesquisaAvancadaLivros() {
         initComponents();
@@ -154,7 +155,11 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
     private void limparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limparActionPerformed
         nomeAutor.setText("");
         nomeEditora.setText("");
+        categoriaComboBox.setSelectedIndex(0);
+        anoPublicacaoComboBox.setSelectedIndex(0);
         this.filtro = new LivroFiltro();
+
+       
         events.emit();
     }//GEN-LAST:event_limparActionPerformed
 
@@ -181,6 +186,7 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
         }
 
         if (!categoria.equals("")) {
+            livroService.registrarBuscaPorCategoria(categoria);
             filtroParaPesquisar.porCategoria(categoria);
         }
 

@@ -180,11 +180,7 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
         if (!nomeAutorText.equals("")) {
             filtroParaPesquisar.porPalavra(nomeAutorText);
         }
-
-        if (!nomeEditoraText.equals("")) {
-            filtroParaPesquisar.porEditora(nomeEditoraText);
-        }
-
+        
         if (!categoria.equals("")) {
             livroService.registrarBuscaPorCategoria(categoria);
             filtroParaPesquisar.porCategoria(categoria);

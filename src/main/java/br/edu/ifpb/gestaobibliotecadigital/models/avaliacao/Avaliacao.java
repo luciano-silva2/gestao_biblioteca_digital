@@ -17,19 +17,19 @@ import java.util.UUID;
 public class Avaliacao implements Serializable{
     private final Livro livro;
     private final Usuario usuario;
-    private final int nota;
+    private final double nota;
     private final String comentario;
     private final LocalDateTime dataHora;
     private final UUID id;
         
 
-    public Avaliacao(Livro livro, Usuario usuario, int nota, String comentario) {
+    public Avaliacao(Livro livro, Usuario usuario, double nota, String comentario, UUID livroId) {
         this.livro = livro;
         this.usuario = usuario;
         this.nota = nota;
         this.comentario = comentario;
         this.dataHora = LocalDateTime.now();
-        this.id = UUID.randomUUID();
+        this.id = livroId;
     }
     
 
@@ -41,7 +41,7 @@ public class Avaliacao implements Serializable{
         return usuario;
     }
 
-    public int getNota() {
+    public double getNota() {
         return nota;
     }
 
@@ -55,7 +55,7 @@ public class Avaliacao implements Serializable{
 
     @Override
     public String toString() {
-        return "Avaliacao{" + "livro=" + livro.getTitulo() + ", usuario = " + usuario + ", nota=" + nota + ", comentario=" + comentario + ", dataHora=" + dataHora + '}';
+        return "Avaliacao{" + livro.getId() + "livro=" + livro.getTitulo() + ", usuario = " + usuario + ", nota=" + nota + ", comentario=" + comentario + ", dataHora=" + dataHora + '}';
     }
 
     public UUID getId() {

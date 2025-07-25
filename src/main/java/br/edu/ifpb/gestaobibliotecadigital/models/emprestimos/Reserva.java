@@ -1,13 +1,14 @@
 package br.edu.ifpb.gestaobibliotecadigital.models.emprestimos;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.Modelo;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.utils.DataProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class Reserva extends Modelo {
 

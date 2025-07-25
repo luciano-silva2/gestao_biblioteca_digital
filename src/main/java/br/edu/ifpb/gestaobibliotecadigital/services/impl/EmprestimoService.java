@@ -7,7 +7,6 @@ import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.Empres
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.EstrategiaEmprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.historico.HistoricoAcao;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.historico.TipoAcao;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.LeitorPremium;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.observers.Notificacao;
@@ -21,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class EmprestimoService {
 
@@ -45,7 +45,7 @@ public class EmprestimoService {
 
         EstrategiaEmprestimo estrategia = usuario instanceof LeitorPremium ? new EmprestimoPremium() : new EmprestimoPadrao();
         Emprestimo emprestimo = new Emprestimo(usuario, livro, estrategia);
-        livro.definirEmprestado();
+//        livro.definirEmprestado();
         emprestimoRepository.adicionar(emprestimo);
         livroRepository.atualizar(livro);
 
@@ -78,7 +78,7 @@ public class EmprestimoService {
         }
 
         emprestimo.setDataDevolvido(DataProvider.agora());
-        emprestimo.getLivro().definirDisponivel();
+//        emprestimo.getLivro().definirDisponivel();
         emprestimoRepository.atualizar(emprestimo);
         livroRepository.atualizar(emprestimo.getLivro());
 
@@ -109,7 +109,7 @@ public class EmprestimoService {
         }
 
         Reserva reserva = new Reserva(usuario, livro);
-        livro.definirReservado();
+//        livro.definirReservado();
         reservaRepository.adicionar(reserva);
         livroRepository.atualizar(livro);
 
@@ -182,7 +182,7 @@ public class EmprestimoService {
                 .collect(Collectors.toList());
 
 //        livrosMaisEmprestados.forEach(entry -> {
-//            System.out.println("Livro: " + entry.getKey().getTitulo() + " - Empréstimos: " + entry.getValue());
+//            System.out.println("LivroSimples: " + entry.getKey().getTitulo() + " - Empréstimos: " + entry.getValue());
 //        });
 
         return livrosMaisEmprestados;

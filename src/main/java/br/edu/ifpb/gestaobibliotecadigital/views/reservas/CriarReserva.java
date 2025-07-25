@@ -4,12 +4,12 @@ import br.edu.ifpb.gestaobibliotecadigital.views.reservas.*;
 import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.filters.UsuarioFiltro;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.LivroRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.UsuarioRepository;
 import java.util.List;
 import javax.swing.JOptionPane;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class CriarReserva extends javax.swing.JDialog {
 
@@ -57,7 +57,7 @@ public class CriarReserva extends javax.swing.JDialog {
      * Altera o livro selecionado para que possa abrir esta janela com algum
      * livro selecionado por padrão
      *
-     * @param livro Livro selecionado
+     * @param livro LivroSimples selecionado
      */
     public void setLivro(Livro livro) {
         this.livro = livro;
@@ -82,7 +82,7 @@ public class CriarReserva extends javax.swing.JDialog {
     /**
      * Função que será executada quando clicar em algum livro
      *
-     * @param livro Livro destacado
+     * @param livro LivroSimples destacado
      */
     public void aoDestacarLivro(Livro livro) {
         this.livro = livro;

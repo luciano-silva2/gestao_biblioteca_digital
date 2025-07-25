@@ -2,7 +2,6 @@ package br.edu.ifpb.gestaobibliotecadigital.views.emprestimos;
 
 import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
 import javax.swing.JOptionPane;

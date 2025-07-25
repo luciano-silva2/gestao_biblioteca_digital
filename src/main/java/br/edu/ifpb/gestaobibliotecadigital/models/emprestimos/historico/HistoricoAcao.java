@@ -2,12 +2,13 @@ package br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.historico;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.utils.DataProvider;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class HistoricoAcao implements Serializable {
 

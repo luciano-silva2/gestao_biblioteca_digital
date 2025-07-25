@@ -1,9 +1,9 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.livros;
 
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.TabelaItensPanel;
 import java.util.ArrayList;
 import java.util.List;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class TabelaLivros extends TabelaItensPanel<Livro> {
 

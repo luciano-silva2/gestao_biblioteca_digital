@@ -97,10 +97,10 @@ public abstract class Repositorio<T> implements Serializable {
         try {
             itens = (ArrayList<T>) Serializador.ler(dbPath);
         } catch (FileNotFoundException ex) {
-            System.out.println("Aviso: Repositório não existe");
+            System.out.println("Aviso: Repositório não existe: " + getNome());
             itens = new ArrayList<>();
         } catch (ClassNotFoundException | IOException ex) {
-            System.err.println("Ocorreu um erro ao carregar repositório: ");
+            System.err.println("Ocorreu um erro ao carregar repositório: " + getNome());
             ex.printStackTrace();
             itens = new ArrayList<>();
         }
@@ -113,7 +113,7 @@ public abstract class Repositorio<T> implements Serializable {
         try {
             Serializador.escrever(dbPath, itens);
         } catch (IOException e) {
-            System.err.println("Ocorreu um erro ao salvar repositório: ");
+            System.err.println("Ocorreu um erro ao salvar repositório: " + getNome());
             e.printStackTrace();
         }
     }
@@ -125,8 +125,10 @@ public abstract class Repositorio<T> implements Serializable {
         try {
             Serializador.excluir(dbPath);
         } catch (Exception e) {
-            System.err.println("Ocorreu um erro ao excluir repositório: ");
+            System.err.println("Ocorreu um erro ao excluir repositório: " + getNome());
             e.printStackTrace();
         }
     }
+
+    protected abstract String getNome();
 }

@@ -1,10 +1,10 @@
 package br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estados;
 
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 
 public class LivroEmprestado extends EstadoLivro {
 
-    public LivroEmprestado(Livro livro) {
+    public LivroEmprestado(LivroSimples livro) {
         super(livro);
     }
 

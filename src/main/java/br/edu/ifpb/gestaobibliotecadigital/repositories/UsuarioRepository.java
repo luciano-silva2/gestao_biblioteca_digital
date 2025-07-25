@@ -21,4 +21,10 @@ public class UsuarioRepository extends Repositorio<Usuario> {
         }
         return instance;
     }
+
+    @Override
+    protected String getNome() {
+        return "Usuário";
+    }
+    
 }

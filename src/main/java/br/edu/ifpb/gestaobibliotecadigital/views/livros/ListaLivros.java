@@ -1,18 +1,19 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.livros;
 
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
-import br.edu.ifpb.gestaobibliotecadigital.services.impl.LivroService;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Paginacao;
 import java.util.List;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.repositories.LivroRepository;
 
 public class ListaLivros extends javax.swing.JFrame {
-
-    private final LivroService livroService = new LivroService();
-    private List<Livro> listaLivros = livroService.listar();
+   
+    private final LivroRepository livroRepository = LivroRepository.getInstance();
+    private List<Livro> listaLivros = livroRepository.listar();
     private String pesquisa = "";
     private LivroFiltro filtro = new LivroFiltro();
     private Paginacao<Livro> paginacao;
+    private final int TAMANHO_PAGINA = 10;
 
     public ListaLivros() {
         initComponents();
@@ -20,23 +21,23 @@ public class ListaLivros extends javax.swing.JFrame {
         proximoButton.setEnabled(false);
         voltarButton.setEnabled(false);
 
-        paginacao = new Paginacao<>(listaLivros, 5);
+        paginacao = new Paginacao<>(listaLivros, TAMANHO_PAGINA);
         tabelaLivros.setDados(paginacao.getPaginaAtual());
 
         atualizarControlesDePaginacao();
 
-        acoesLivro1.events.onUpdate(() -> {
-            listaLivros = livroService.listar();
+        acoesLivro.events.onUpdate(() -> {
+            listaLivros = livroRepository.listar();
             filtrar();
         });
 
-        pesquisarPanel1.events.onUpdate(() -> {
-            pesquisa = pesquisarPanel1.getText();
+        pesquisarLivrosPanel.events.onUpdate(() -> {
+            pesquisa = pesquisarLivrosPanel.getText();
             filtrar();
         });
 
-        pesquisaAvancadaLivros1.events.onUpdate(() -> {
-            filtro = pesquisaAvancadaLivros1.getFiltro();
+        pesquisaAvancadaLivros.events.onUpdate(() -> {
+            filtro = pesquisaAvancadaLivros.getFiltro();
             filtrar();
         });
 
@@ -57,7 +58,7 @@ public class ListaLivros extends javax.swing.JFrame {
         List<Livro> filtrados = filtroClone.filtrar();
 
         // Cria nova paginação com os itens filtrados
-        this.paginacao = new Paginacao<>(filtrados, 5);
+        this.paginacao = new Paginacao<>(filtrados, TAMANHO_PAGINA);
 
         atualizarControlesDePaginacao();
 
@@ -72,36 +73,42 @@ public class ListaLivros extends javax.swing.JFrame {
      * Ao destacar um item da tabela
      */
     private void onItemDestacadoLivros(Livro item) {
-        sinopseLivro2.setLivro(item == null ? null : item);
+        sinopseLivro.setLivro(item == null ? null : item);
         detalhesAutor1.setLivro(item == null ? null : item);
+        resumoEstendido.setLivro(item == null ? null : item);
+        capaLivro1.setLivro(item == null ? null : item);
+        acoesLivro.setLivro(item);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pesquisarPanel1 = new br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel();
+        pesquisarLivrosPanel = new br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel();
         titulo = new javax.swing.JLabel();
         usuarioPanel1 = new br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel();
-        pesquisaAvancadaLivros1 = new br.edu.ifpb.gestaobibliotecadigital.views.livros.PesquisaAvancadaLivros();
-        sinopseLivro2 = new br.edu.ifpb.gestaobibliotecadigital.views.livros.SinopseLivro();
+        pesquisaAvancadaLivros = new br.edu.ifpb.gestaobibliotecadigital.views.livros.PesquisaAvancadaLivros();
+        sinopseLivro = new br.edu.ifpb.gestaobibliotecadigital.views.livros.SinopseLivro();
         tabelaLivros = new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros();
-        acoesLivro1 = new br.edu.ifpb.gestaobibliotecadigital.views.livros.AcoesLivro();
         qntLabel = new javax.swing.JLabel();
         proximoButton = new javax.swing.JButton();
         voltarButton = new javax.swing.JButton();
         detalhesAutor1 = new br.edu.ifpb.gestaobibliotecadigital.views.livros.DetalhesAutor();
+        capaLivro1 = new br.edu.ifpb.gestaobibliotecadigital.views.livros.CapaLivro();
+        resumoEstendido = new br.edu.ifpb.gestaobibliotecadigital.views.livros.ResumoEstendido();
+        acoesLivro = new br.edu.ifpb.gestaobibliotecadigital.views.livros.AcoesLivro();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lista de Livros");
         setMinimumSize(new java.awt.Dimension(844, 585));
+        setResizable(false);
 
         titulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         titulo.setText("Listagem de Livros");
 
         tabelaLivros = new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros(){
             @Override
-            protected void onItemDestacado(Livro item) {
+            protected void onItemDestacado(br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro item) {
                 onItemDestacadoLivros(item);
             };
         };
@@ -133,28 +140,34 @@ public class ListaLivros extends javax.swing.JFrame {
                         .addComponent(titulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pesquisarPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pesquisarLivrosPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(pesquisaAvancadaLivros1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pesquisaAvancadaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(detalhesAutor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(capaLivro1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tabelaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(sinopseLivro2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(acoesLivro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(qntLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sinopseLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(acoesLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(124, 124, 124)
-                                        .addComponent(voltarButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(proximoButton))
+                                        .addComponent(resumoEstendido, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                                        .addGap(12, 12, 12))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(detalhesAutor1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(tabelaLivros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGap(143, 143, 143)
+                                        .addComponent(qntLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(voltarButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(proximoButton)))))))
                 .addGap(6, 6, 6))
         );
         layout.setVerticalGroup(
@@ -164,25 +177,31 @@ public class ListaLivros extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(titulo)
                     .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addComponent(pesquisarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pesquisarLivrosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(tabelaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(detalhesAutor1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tabelaLivros, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(capaLivro1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(acoesLivro1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(qntLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(proximoButton)
-                                .addComponent(voltarButton)))
+                                .addComponent(voltarButton)
+                                .addComponent(qntLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(acoesLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(sinopseLivro2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                            .addComponent(detalhesAutor1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                    .addComponent(pesquisaAvancadaLivros1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+                            .addComponent(sinopseLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(resumoEstendido, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(9, 9, 9))
+                    .addComponent(pesquisaAvancadaLivros, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -232,21 +251,21 @@ public class ListaLivros extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListaLivros().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ListaLivros().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private br.edu.ifpb.gestaobibliotecadigital.views.livros.AcoesLivro acoesLivro1;
+    private br.edu.ifpb.gestaobibliotecadigital.views.livros.AcoesLivro acoesLivro;
+    private br.edu.ifpb.gestaobibliotecadigital.views.livros.CapaLivro capaLivro1;
     private br.edu.ifpb.gestaobibliotecadigital.views.livros.DetalhesAutor detalhesAutor1;
-    private br.edu.ifpb.gestaobibliotecadigital.views.livros.PesquisaAvancadaLivros pesquisaAvancadaLivros1;
-    private br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel pesquisarPanel1;
+    private br.edu.ifpb.gestaobibliotecadigital.views.livros.PesquisaAvancadaLivros pesquisaAvancadaLivros;
+    private br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel pesquisarLivrosPanel;
     private javax.swing.JButton proximoButton;
     private javax.swing.JLabel qntLabel;
-    private br.edu.ifpb.gestaobibliotecadigital.views.livros.SinopseLivro sinopseLivro2;
+    private br.edu.ifpb.gestaobibliotecadigital.views.livros.ResumoEstendido resumoEstendido;
+    private br.edu.ifpb.gestaobibliotecadigital.views.livros.SinopseLivro sinopseLivro;
     private br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros tabelaLivros;
     private javax.swing.JLabel titulo;
     private br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel usuarioPanel1;

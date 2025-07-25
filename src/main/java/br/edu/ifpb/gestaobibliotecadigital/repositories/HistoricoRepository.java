@@ -21,4 +21,9 @@ public class HistoricoRepository extends Repositorio<HistoricoAcao> {
         }
         return instance;
     }
+
+    @Override
+    protected String getNome() {
+        return "Histórico";
+    }
 }

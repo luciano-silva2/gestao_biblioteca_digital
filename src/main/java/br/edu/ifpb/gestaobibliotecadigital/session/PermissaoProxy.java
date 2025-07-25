@@ -12,7 +12,7 @@ public class PermissaoProxy {
 
     public static boolean podeAvaliarLivro() {
         Usuario usuario = UserSessionManager.getInstance().getUsuarioLogado();
-        return usuario != null; // todos os logados podem avaliar
+        return usuario != null; 
     }
 
     public static boolean podeAcessarRelatorios() {
@@ -25,5 +25,13 @@ public class PermissaoProxy {
         return usuario != null && usuario.getTipo().equals("LeitorPremium");
     }
 
-    // Adicione outras permissões conforme necessário...
+    public static boolean podeAdicionarLivro() {
+        Usuario usuario = UserSessionManager.getInstance().getUsuarioLogado();
+        return usuario instanceof Administrador;
+    }
+    
+    public static boolean podeEditarLivro() {
+        Usuario usuario = UserSessionManager.getInstance().getUsuarioLogado();
+        return usuario instanceof Administrador;
+    }
 }

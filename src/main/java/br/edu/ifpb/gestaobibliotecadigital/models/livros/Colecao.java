@@ -1,42 +1,57 @@
 package br.edu.ifpb.gestaobibliotecadigital.models.livros;
 
+import br.edu.ifpb.gestaobibliotecadigital.models.Modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Colecao implements ItemBiblioteca {
+public class Colecao extends Modelo implements IColecaoLivros {
+
     private final String nome;
-    private final List<ItemBiblioteca> colecaoLivro = new ArrayList<>();
+    private final List<IColecaoLivros> colecaoLivros = new ArrayList<>();
 
     public Colecao(String nome) {
+        super();
         this.nome = nome;
-    }
-
-    public void adicionar(ItemBiblioteca componente) {
-        colecaoLivro.add(componente);
-    }
-
-    public void remover(ItemBiblioteca componente) {
-        colecaoLivro.remove(componente);
-    }
-
-    public List<ItemBiblioteca> getComponentes() {
-        return colecaoLivro;
     }
 
     public String getNome() {
         return nome;
     }
 
+    public List<IColecaoLivros> getColecaoLivros() {
+        return colecaoLivros;
+    }
+
+    public void adicionar(IColecaoLivros livro) {
+        colecaoLivros.add(livro);
+    }
+
+    public void remover(IColecaoLivros livro) {
+        colecaoLivros.remove(livro);
+    }
+
+    public List<IColecaoLivros> getColecao() {
+        return colecaoLivros;
+    }
+
+    public List<IColecaoLivros> getItens() {
+        return colecaoLivros;
+    }
+
     @Override
-    public String getTitulo() {
-        return nome;
+    public String getDescricao() {
+        StringBuilder sb = new StringBuilder("Coleção: " + nome + "\n");
+        for (IColecaoLivros livro : colecaoLivros) {
+            sb.append("  - ").append(livro.getDescricao()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getTitulo() + "\n");
-        for (ItemBiblioteca c : colecaoLivro) {
-            sb.append("- ").append(c.getTitulo()).append("\n");
+        StringBuilder sb = new StringBuilder("\n");
+        for (IColecaoLivros livro : colecaoLivros) {
+            sb.append(livro.getDescricao()).append('\n');
         }
         return sb.toString();
     }

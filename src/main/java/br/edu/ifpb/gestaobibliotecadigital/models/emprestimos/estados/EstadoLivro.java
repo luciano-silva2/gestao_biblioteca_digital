@@ -1,13 +1,13 @@
 package br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estados;
 
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 import java.io.Serializable;
 
 public abstract class EstadoLivro implements Serializable {
 
-    protected Livro livro;
+    protected LivroSimples livro;
 
-    public EstadoLivro(Livro livro) {
+    public EstadoLivro(LivroSimples livro) {
         this.livro = livro;
     }
 

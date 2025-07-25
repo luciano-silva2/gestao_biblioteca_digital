@@ -21,4 +21,9 @@ public class AvaliacaoRepository extends Repositorio<Avaliacao> {
         }
         return instance;
     }
+
+    @Override
+    protected String getNome() {
+        return "Avaliação";
+    }
 }

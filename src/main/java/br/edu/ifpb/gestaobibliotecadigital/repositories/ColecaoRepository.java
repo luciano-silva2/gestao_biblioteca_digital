@@ -16,18 +16,14 @@ public class ColecaoRepository extends Repositorio<Colecao> {
         }
         return instance;
     }
-    
 
     @Override
     protected String getId(Colecao item) {
-        return item.getNome();
+        return item.getId().toString();
     }
-    
-   
-    public Optional<Colecao> findByNome(String nome) {
-        return this.itens.stream()
-                .filter(c -> c.getNome().equalsIgnoreCase(nome))
-                .findFirst();
+
+    @Override
+    protected String getNome() {
+        return "Coleção";
     }
 }
-

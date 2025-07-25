@@ -2,11 +2,11 @@ package br.edu.ifpb.gestaobibliotecadigital.controllers;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.observers.Notificacao;
 import br.edu.ifpb.gestaobibliotecadigital.observers.NotificacaoObserver;
 import br.edu.ifpb.gestaobibliotecadigital.services.impl.EmprestimoService;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class EmprestimoController extends Controller {
 

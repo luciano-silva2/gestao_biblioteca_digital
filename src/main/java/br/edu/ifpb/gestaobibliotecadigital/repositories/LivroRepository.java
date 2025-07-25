@@ -22,7 +22,12 @@ public class LivroRepository extends Repositorio<Livro> {
 
     @Override
     protected String getId(Livro item) {
-        return item.getId().toString();
+        return item.getISBN();
+    }
+
+    @Override
+    protected String getNome() {
+        return "Livros";
     }
 
 }

@@ -140,7 +140,7 @@
     </Component>
     <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros" name="tabelaLivros">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros() {&#xa;    @Override&#xa;    protected void onItemDestacado(Livro item) {&#xa;        aoDestacarLivro(item);&#xa;    }&#xa;};"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros() {&#xa;    @Override&#xa;    protected void onItemDestacado(br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro item) {&#xa;        aoDestacarLivro(item);&#xa;    }&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="br.edu.ifpb.gestaobibliotecadigital.views.livros.DetalhesLivro" name="detalhesLivro">

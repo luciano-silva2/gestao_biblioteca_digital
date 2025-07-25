@@ -2,8 +2,8 @@ package br.edu.ifpb.gestaobibliotecadigital.repositories;
 
 import br.edu.ifpb.gestaobibliotecadigital.filters.ReservaFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import java.util.List;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class ReservaRepository extends Repositorio<Reserva> {
 
@@ -37,5 +37,10 @@ public class ReservaRepository extends Repositorio<Reserva> {
 
         // Retorna a primeira reserva, pois só pode haver uma
         return reservas.get(0);
+    }
+
+    @Override
+    protected String getNome() {
+        return "Reserva";
     }
 }

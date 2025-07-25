@@ -3,7 +3,6 @@ package br.edu.ifpb.gestaobibliotecadigital.views.livros;
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.services.impl.LivroService;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
-import br.edu.ifpb.gestaobibliotecadigital.utils.Paginacao;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -14,13 +13,11 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
 
     public final UpdateObserver events = new UpdateObserver();
     private LivroFiltro filtro = new LivroFiltro();
-    private LivroService livroService = new LivroService();
+    private final LivroService livroService = new LivroService();
 
     public PesquisaAvancadaLivros() {
         initComponents();
         initEnterPress();
-        categoriaComboBox.setModel(new DefaultComboBoxModel<>(Helpers.CATEGORIAS));
-        anoPublicacaoComboBox.setModel(new DefaultComboBoxModel<>(Helpers.getAnos()));
     }
 
     /**
@@ -92,7 +89,11 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
 
         nomeCategoriaLabel.setText("Categoria");
 
+        categoriaComboBox.setModel(new DefaultComboBoxModel<>(Helpers.getCategorias(true)));
+
         anoPublicacaoLabel.setText("Ano de publicação");
+
+        anoPublicacaoComboBox.setModel(new DefaultComboBoxModel<>(Helpers.getAnos(true)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -159,7 +160,6 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
         anoPublicacaoComboBox.setSelectedIndex(0);
         this.filtro = new LivroFiltro();
 
-       
         events.emit();
     }//GEN-LAST:event_limparActionPerformed
 
@@ -180,7 +180,11 @@ public class PesquisaAvancadaLivros extends javax.swing.JPanel {
         if (!nomeAutorText.equals("")) {
             filtroParaPesquisar.porPalavra(nomeAutorText);
         }
-        
+
+        if (!nomeEditoraText.equals("")) {
+            filtroParaPesquisar.porEditora(nomeEditoraText);
+        }
+
         if (!categoria.equals("")) {
             livroService.registrarBuscaPorCategoria(categoria);
             filtroParaPesquisar.porCategoria(categoria);

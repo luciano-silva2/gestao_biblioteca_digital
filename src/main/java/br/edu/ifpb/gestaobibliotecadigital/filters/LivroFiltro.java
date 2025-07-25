@@ -1,8 +1,8 @@
 package br.edu.ifpb.gestaobibliotecadigital.filters;
 
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
 import java.util.List;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class LivroFiltro extends Filtro<Livro> {
 
@@ -50,6 +50,18 @@ public class LivroFiltro extends Filtro<Livro> {
         return this;
     }
 
+    // Por autor
+    public LivroFiltro porEditora(String nomeEditora) {
+        String nomeEditoraNormalizado = Helpers.normalizarTexto(nomeEditora);
+
+        filtros.add((Livro livro) -> {
+            String editoraDoLivroNormalizado = Helpers.normalizarTexto(livro.getEditora());
+            return editoraDoLivroNormalizado.contains(nomeEditoraNormalizado);
+        });
+
+        return this;
+    }
+
     // Por Palavras-chave 
     public LivroFiltro porPalavra(String palavraChave) {
         String palavraChaveNormalizado = Helpers.normalizarTexto(palavraChave);
@@ -76,6 +88,4 @@ public class LivroFiltro extends Filtro<Livro> {
         filtros.add(livro -> livro.getAno() == livroAno);
         return this;
     }
-
- 
 }

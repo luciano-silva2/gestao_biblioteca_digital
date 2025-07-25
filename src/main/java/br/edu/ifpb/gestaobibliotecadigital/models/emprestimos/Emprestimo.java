@@ -2,7 +2,7 @@ package br.edu.ifpb.gestaobibliotecadigital.models.emprestimos;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.Modelo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.EstrategiaEmprestimo;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.utils.DataProvider;
 import java.text.NumberFormat;
@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Locale;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class Emprestimo extends Modelo {
 

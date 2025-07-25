@@ -1,40 +1,22 @@
 package br.edu.ifpb.gestaobibliotecadigital.models.livros;
 
-import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estados.EstadoLivro;
-import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estados.LivroDisponivel;
 import java.util.UUID;
 
-public class Livro implements ItemBiblioteca {
+public abstract class Livro implements IColecaoLivros {
 
-    private EstadoLivro estado = new LivroDisponivel(this);
+    protected final UUID id;
+    protected String titulo;
+    protected String autor;
+    protected int ano;
+    protected String editora;
+    protected String ISBN;
+    protected String sinopse;
+    protected String categoria;
 
-    private UUID id;
-    private String titulo;
-    private String autor;
-    private int ano;
-    private String editora;
-    private String ISBN;
-    private String sinopse;
-    private String categoria;
-//    private String capaAlternativa;
-//    private String resumoEstendido;
-    
     private int totalAvaliacoes = 0;
     private int somaNotas = 0;
 
-    public double getTotalAvaliacoes() {
-        return totalAvaliacoes == 0 ? 0.0 : (double) somaNotas / totalAvaliacoes;
-    }
-    public void adicionarAvaliacao(int nota){
-        this.totalAvaliacoes++;
-        this.somaNotas += nota;
-    }
-
-    public Livro() {
-    }
-
-    public Livro(String titulo, String autor, int ano, String editora, String ISBN,
-            String sinopse, String categoria) {
+    public Livro(String titulo, String autor, int ano, String editora, String ISBN, String sinopse, String categoria) {
         this.id = UUID.randomUUID();
         this.titulo = titulo;
         this.autor = autor;
@@ -43,15 +25,12 @@ public class Livro implements ItemBiblioteca {
         this.ISBN = ISBN;
         this.sinopse = sinopse;
         this.categoria = categoria;
-//        this.capaAlternativa = capaAlternativa;
-//        this.resumoEstendido = resumoEstendido;
     }
 
     public UUID getId() {
         return id;
     }
 
-    @Override
     public String getTitulo() {
         return titulo;
     }
@@ -76,46 +55,33 @@ public class Livro implements ItemBiblioteca {
         return sinopse;
     }
 
+    public double getTotalAvaliacoes() {
+        return totalAvaliacoes == 0 ? 0.0 : (double) somaNotas / totalAvaliacoes;
+    }
+
+    public void adicionarAvaliacao(int nota) {
+        this.totalAvaliacoes++;
+        this.somaNotas += nota;
+    }
+
     public String getCategoria() {
         return categoria;
     }
 
-    public void setEstado(EstadoLivro estado) {
-        this.estado = estado;
-    }
+    @Override
+    public abstract String getDescricao();
 
-    public void definirDisponivel() {
-        this.estado.devolver();
-    }
-
-    public void definirEmprestado() {
-        this.estado.emprestar();
-    }
-
-    public void definirReservado() {
-        this.estado.reservar();
-    }
-
-    public void definirAtrasado() {
-        this.estado.atrasar();
-    }
-
-//    public String getCapaAlternativa() {
-//        return capaAlternativa;
-//    }
-//
-//    public String getResumoEstendido() {
-//        return resumoEstendido;
-//    }
     @Override
     public String toString() {
-        return "Id: " + id
-                + "\nTítulo: " + titulo
-                + "\nAutor: " + autor
-                + "\nAno: " + ano
-                + "\nEditora: " + editora
-                + "\nISBN: " + ISBN
-                + "\nCategoria: " + categoria;
+        return "id: " + id + "\n"
+                + "Título: " + titulo + "\n"
+                + "Autor: " + autor + "\n"
+                + "Ano: " + ano + "\n"
+                + "Editora: " + editora + "\n"
+                + "ISBN: " + ISBN + "\n"
+                + "Categoria: " + categoria + "\n"
+                + "Sinopse: " + sinopse + "\n"
+                + "Avaliação média: " + String.format("%.2f", getTotalAvaliacoes()
+                );
     }
-
 }

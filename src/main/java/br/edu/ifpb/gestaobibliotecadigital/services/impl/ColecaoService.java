@@ -1,56 +1,61 @@
 package br.edu.ifpb.gestaobibliotecadigital.services.impl;
 
+import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Colecao;
-import br.edu.ifpb.gestaobibliotecadigital.models.livros.ItemBiblioteca;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.ColecaoRepository;
-import br.edu.ifpb.gestaobibliotecadigital.services.interfaces.IColecaoService;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import java.util.ArrayList;
 
-public class ColecaoService implements IColecaoService {
+public class ColecaoService {
 
     private final ColecaoRepository colecaoRepository = ColecaoRepository.getInstance();
+    private static final Logger logger = Logger.getLogger(ColecaoService.class.getName());
 
-    @Override
-    public Colecao criarColecao(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome da coleção não pode ser vazio.");
-        }
-        colecaoRepository.findByNome(nome).ifPresent(c -> {
-            throw new IllegalStateException("Já existe uma coleção com o nome: " + nome);
-        });
-        
-        Colecao novaColecao = new Colecao(nome);
-        colecaoRepository.adicionar(novaColecao);
-        return novaColecao;
-    }
-
-    @Override
-    public Colecao adicionarItemAColecao(Colecao colecao, ItemBiblioteca item) {
-        if (colecao == null || item == null) {
-            throw new IllegalArgumentException("Coleção e item não podem ser nulos.");
-        }
-        colecao.adicionar(item);
-        colecaoRepository.atualizar(colecao);
-        return colecao;
-    }
-
-    @Override
-    public Colecao buscarPorNome(String nome) {
-        return colecaoRepository.findByNome(nome).orElse(null);
-    }
-
-    @Override
-    public List<Colecao> listarTodas() {
+    public List<Colecao> listarColecoes() {
         return colecaoRepository.listar();
     }
-    
-    @Override
-    public void removerColecao(String nome) {
-        Colecao colecao = buscarPorNome(nome);
-        if (colecao != null) {
-            colecaoRepository.excluir(colecao);
-        } else {
-            throw new IllegalStateException("Coleção não encontrada para remoção.");
-        }
+
+    public void criarColecao(Colecao colecao) {
+        logger.log(Level.INFO, "Criando coleção: {0}", colecao.getNome());
+        colecaoRepository.adicionar(colecao);
     }
+
+    // Conveter os livros dentro de uma coleção
+    public List<Livro> listarLivrosDeColecao(Colecao colecao) {
+        return colecao == null ? new ArrayList<>()
+                : colecao.getItens().stream()
+                        .filter(Livro.class::isInstance)
+                        .map(Livro.class::cast)
+                        .toList();
+    }
+
+    public void adicionarLivroAColecao(Colecao colecao, Livro livro) {
+        if (livro == null) {
+            throw new IllegalArgumentException("Livro não pode ser nulo.");
+        }
+
+        LivroFiltro livroFiltro = new LivroFiltro(listarLivrosDeColecao(colecao));
+        List<Livro> resultados = livroFiltro.porLivro(livro.getISBN()).filtrar();
+
+        if (!resultados.isEmpty()) {
+            throw new IllegalStateException("Este livro já está cadastrado nessa coleção.");
+        }
+
+        colecao.adicionar(livro);
+        logger.log(Level.INFO, "Adicionado à coleção: {0}", livro.getTitulo());
+        colecaoRepository.atualizar(colecao);
+    }
+
+    public void remover(Colecao colecao) {
+        colecaoRepository.excluir(colecao);
+    }
+
+    public void removerDaColecao(Colecao colecao, Livro livro) {
+        colecao.remover(livro);
+        colecaoRepository.atualizar(colecao);
+    }
+
 }

@@ -14,6 +14,8 @@ public class MainEquipe5{
 
         Relatorio r = new Relatorio();
         r.usuariosMaisAtivos();
+        r.livrosMaisEmprestados();
+
 
     }
 

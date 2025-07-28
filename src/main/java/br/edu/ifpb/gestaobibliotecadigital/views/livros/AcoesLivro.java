@@ -7,6 +7,7 @@ import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.session.PermissaoProxy;
 import br.edu.ifpb.gestaobibliotecadigital.session.UserSessionManager;
+import br.edu.ifpb.gestaobibliotecadigital.views.avaliacoes.Criar_AvaliacoesLivro;
 
 public class AcoesLivro extends javax.swing.JPanel {
 
@@ -154,6 +155,7 @@ public class AcoesLivro extends javax.swing.JPanel {
     private void comentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comentarActionPerformed
         // TODO add your handling code here:
         System.out.println(usuarioLogado.getNome());
+        new Criar_AvaliacoesLivro(usuarioLogado, livro).setVisible(true);
         ///
     }//GEN-LAST:event_comentarActionPerformed
 

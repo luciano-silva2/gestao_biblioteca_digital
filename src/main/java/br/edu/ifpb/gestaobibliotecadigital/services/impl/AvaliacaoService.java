@@ -6,7 +6,7 @@ package br.edu.ifpb.gestaobibliotecadigital.services.impl;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.avaliacao.Avaliacao;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.AvaliacaoRepository;
-import br.edu.ifpb.gestaobibliotecadigital.services.interfaces.AvaliacaoObserver;
+import br.edu.ifpb.gestaobibliotecadigital.observers.AvaliacaoObserver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

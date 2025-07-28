@@ -4,16 +4,13 @@
  */
 package br.edu.ifpb.gestaobibliotecadigital.models.avaliacao;
 
+import br.edu.ifpb.gestaobibliotecadigital.app.flyweight.ComentarioFlyweight;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- *
- * @author 202312040013
- */
 public class Avaliacao implements Serializable{
     private final Livro livro;
     private final Usuario usuario;
@@ -21,13 +18,13 @@ public class Avaliacao implements Serializable{
     private final String comentario;
     private final LocalDateTime dataHora;
     private final UUID id;
-        
+            
 
     public Avaliacao(Livro livro, Usuario usuario, double nota, String comentario, UUID livroId) {
         this.livro = livro;
         this.usuario = usuario;
         this.nota = nota;
-        this.comentario = comentario;
+        this.comentario = ComentarioFlyweight.getComentario(comentario);;
         this.dataHora = LocalDateTime.now();
         this.id = livroId;
     }

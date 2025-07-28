@@ -1,5 +1,6 @@
 package br.edu.ifpb.gestaobibliotecadigital.controllers;
 
+import br.edu.ifpb.gestaobibliotecadigital.adapters.BookAPIAdapter;
 import br.edu.ifpb.gestaobibliotecadigital.services.impl.LivroService;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
@@ -23,6 +24,11 @@ public class LivroController extends Controller {
         verificaUsuarioLogado();
         verificaAdministrador();
         livroService.deletar(livroDeletar);
+    }
+    
+    public Livro buscarLivroPorISBN(String isbn) {
+        BookAPIAdapter adapter = new BookAPIAdapter();
+        return adapter.buscarLivroPorISBN(isbn);
     }
     
 }

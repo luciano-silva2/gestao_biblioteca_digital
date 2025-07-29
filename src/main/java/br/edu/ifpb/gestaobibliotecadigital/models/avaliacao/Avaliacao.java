@@ -4,7 +4,7 @@
  */
 package br.edu.ifpb.gestaobibliotecadigital.models.avaliacao;
 
-import br.edu.ifpb.gestaobibliotecadigital.app.flyweight.ComentarioFlyweight;
+import br.edu.ifpb.gestaobibliotecadigital.flyweight.ComentarioFlyweight;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import java.io.Serializable;

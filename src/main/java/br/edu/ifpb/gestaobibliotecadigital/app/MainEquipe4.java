@@ -50,13 +50,6 @@ public class MainEquipe4 {
         
          AvaliacaoService avaliacaoService = new AvaliacaoService();
 
-        // observador
-        avaliacaoService.adicionarObserver(avaliacao -> {
-            System.out.println("Nova avaliação registrada para o livro: " + avaliacao.getLivro().getTitulo());
-            System.out.println("Nota: " + avaliacao.getNota());
-            System.out.println("Comentário: " + avaliacao.getComentario());
-        });
-
         /*
         Avaliacao avaliacao1 = new Avaliacao(livro, usuario1, 4, "bom", livro.getId());
         Avaliacao avaliacao2 = new Avaliacao(livro, usuario2, 5, "Excelente", livro.getId());

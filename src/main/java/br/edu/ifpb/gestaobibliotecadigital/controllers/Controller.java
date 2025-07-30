@@ -11,13 +11,13 @@ public abstract class Controller {
 
     protected void verificaUsuarioLogado() {
         if (usuarioLogado == null) {
-            throw new IllegalStateException("É necessário estar autenticado para realizar esta ação");
+            throw new IllegalStateException("Você precisa estar autenticado para continuar");
         }
     }
 
     protected void verificaAdministrador() {
         if (!isAdmin()) {
-            throw new IllegalStateException("É necessário ser administrador para realizar esta ação");
+            throw new IllegalStateException("Você não tem permissão de administrador para continuar");
         }
     }
     

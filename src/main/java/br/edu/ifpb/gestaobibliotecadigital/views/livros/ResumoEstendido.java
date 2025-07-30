@@ -2,6 +2,7 @@ package br.edu.ifpb.gestaobibliotecadigital.views.livros;
 
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroComResumoEstendido;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
 
 public class ResumoEstendido extends javax.swing.JPanel {
 
@@ -19,15 +20,18 @@ public class ResumoEstendido extends javax.swing.JPanel {
      * Atualiza a sinopse do livro selecionado
      */
     void setLivro(Livro livro) {
-
         this.livro = livro;
 
-        if (livro == null) {
-            resumoEstendido.setText(" ");
-        } else {
-            if (livro instanceof LivroComResumoEstendido resumoEstendidoLivro) {
+        if (livro != null) {
+            LivroComResumoEstendido resumoEstendidoLivro = Helpers.getLivroComDecorador(livro, LivroComResumoEstendido.class);
+
+            if (resumoEstendidoLivro != null) {
                 resumoEstendido.setText(resumoEstendidoLivro.getResumoEstendido());
+            } else {
+                resumoEstendido.setText(" ");
             }
+        } else {
+            resumoEstendido.setText(" ");
         }
     }
 

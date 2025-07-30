@@ -8,10 +8,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroComTag;
+import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
+import java.util.Arrays;
+import java.util.List;
 
 public class CriarLivros extends javax.swing.JDialog {
 
     private final LivroController livroService = new LivroController();
+    public final UpdateObserver events = new UpdateObserver();
 
     public CriarLivros(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -30,17 +35,23 @@ public class CriarLivros extends javax.swing.JDialog {
         inputISBN.setText(livro.getISBN());
         inputISBN.setEditable(false);
         sinopseLivro.setText(livro.getSinopse());
-
-        if (livro instanceof LivroComResumoEstendido liroComResumo) {
-            resumoLivro.setText(liroComResumo.getResumoEstendido());
-        }
-
-        if (livro instanceof LivroComCapaAlternativa decoradoCapa) {
-            capaAlternativa.setText(decoradoCapa.getUrlCapa());
-        }
-
         anoPublicacaoComboBox.setSelectedItem(String.valueOf(livro.getAno()));
         categoriaComboBox.setSelectedItem(livro.getCategoria());
+
+        LivroComCapaAlternativa livroComCapa = Helpers.getLivroComDecorador(livro, LivroComCapaAlternativa.class);
+        LivroComResumoEstendido resumoEstendidoLivro = Helpers.getLivroComDecorador(livro, LivroComResumoEstendido.class);
+        LivroComTag livroComTag = Helpers.getLivroComDecorador(livro, LivroComTag.class);
+
+        capaAlternativa.setText(
+                livroComCapa != null ? livroComCapa.getUrlCapa() : " "
+        );
+        resumoLivro.setText(
+                resumoEstendidoLivro != null ? resumoEstendidoLivro.getResumoEstendido() : " "
+        );
+        tags.setText(
+                livroComTag != null ? String.join(", ", livroComTag.getTags()) : " "
+        );
+
     }
 
     @SuppressWarnings("unchecked")
@@ -263,15 +274,16 @@ public class CriarLivros extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelarActionPerformed
 
     private Livro formData() {
-        String tituloLivro = nomeLivro.getText();
-        String autor = nomeAutor.getText();
-        String editora = nomeEditora.getText();
-        String isbn = inputISBN.getText();
+        String tituloLivro = nomeLivro.getText().trim();
+        String autor = nomeAutor.getText().trim();
+        String editora = nomeEditora.getText().trim();
+        String isbn = inputISBN.getText().trim();
         String categoria = categoriaComboBox.getSelectedItem().toString();
         String anoSelecionado = anoPublicacaoComboBox.getSelectedItem().toString();
-        String sinopse = sinopseLivro.getText();
-        String resumo = resumoLivro.getText();
-        String urlCapa = capaAlternativa.getText();
+        String sinopse = sinopseLivro.getText().trim();
+        String resumo = resumoLivro.getText().trim();
+        String urlCapa = capaAlternativa.getText().trim();
+        String tagsLivro = tags.getText().trim();
 
         Livro livro = new LivroSimples.Builder(isbn)
                 .setTitulo(tituloLivro)
@@ -290,6 +302,15 @@ public class CriarLivros extends javax.swing.JDialog {
             livro = new LivroComCapaAlternativa(livro, urlCapa);
         }
 
+        if (!tagsLivro.isBlank()) {
+            List<String> listaTags = Arrays.stream(tagsLivro.split(","))
+                    .map(String::trim)
+                    .filter(tag -> !tag.isEmpty())
+                    .toList();
+
+            livro = new LivroComTag(livro, listaTags);
+        }
+
         return livro;
     }
 
@@ -297,6 +318,7 @@ public class CriarLivros extends javax.swing.JDialog {
         try {
             Livro livro = formData();
             livroService.criar(livro);
+            events.emit();
             dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
@@ -313,6 +335,7 @@ public class CriarLivros extends javax.swing.JDialog {
             Livro livroAtulizar = formData();
             livroService.atualizar(livroAtulizar);
             dispose();
+            events.emit();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this,

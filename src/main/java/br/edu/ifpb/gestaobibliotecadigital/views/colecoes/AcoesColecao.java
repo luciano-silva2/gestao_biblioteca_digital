@@ -114,7 +114,7 @@ public class AcoesColecao extends javax.swing.JPanel {
 
     private void removerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerActionPerformed
         try {
-            colecaoService.removerDaColecao(colecao, livro);
+            colecaoService.removerLivroDaColecao(colecao, livro);
             events.emit();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(

@@ -19,6 +19,10 @@ public abstract class LivroDecorator extends Livro {
         this.livroDecorado = livro;
     }
 
+    public Livro getLivro() {
+        return livroDecorado;
+    }
+
     @Override
     public abstract String getDescricao();
 }

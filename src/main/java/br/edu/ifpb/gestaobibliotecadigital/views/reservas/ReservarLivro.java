@@ -1,33 +1,26 @@
-package br.edu.ifpb.gestaobibliotecadigital.views.emprestimos;
+package br.edu.ifpb.gestaobibliotecadigital.views.reservas;
 
 import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
-import br.edu.ifpb.gestaobibliotecadigital.filters.UsuarioFiltro;
-import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.LivroRepository;
-import br.edu.ifpb.gestaobibliotecadigital.repositories.UsuarioRepository;
 import java.util.List;
 import javax.swing.JOptionPane;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
-public class CriarEmprestimo extends javax.swing.JDialog {
+public class ReservarLivro extends javax.swing.JDialog {
 
     private final LivroRepository livroRepository = LivroRepository.getInstance();
-    private final UsuarioRepository usuarioRepository = UsuarioRepository.getInstance();
     private final EmprestimoController emprestimoController = new EmprestimoController();
     private List<Livro> listaLivros = livroRepository.listar();
-    private List<Usuario> listaUsuarios = usuarioRepository.listar();
 
     private Livro livro;
-    private Usuario usuario;
 
-    public CriarEmprestimo(java.awt.Frame parent, boolean modal) {
+    public ReservarLivro(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
         // Define os dados das tabelas
         tabelaLivros.setDados(listaLivros);
-        tabelaUsuarios.setDados(listaUsuarios);
 
         // Filtra a lista de livros quando digitar na caixa de pesquisa
         pesquisarLivros.events.onUpdate(() -> {
@@ -38,17 +31,6 @@ public class CriarEmprestimo extends javax.swing.JDialog {
             }
             tabelaLivros.setDados(filtro.filtrar());
             setLivro(null);
-        });
-
-        // Filtra a lista de usuários quando digitar na caixa de pesquisa
-        pesquisarUsuarios.events.onUpdate(() -> {
-            String textoPesquisaUsuarios = pesquisarUsuarios.getText();
-            UsuarioFiltro filtro = new UsuarioFiltro(listaUsuarios);
-            if (!textoPesquisaUsuarios.trim().equals("")) {
-                filtro.pesquisar(textoPesquisaUsuarios);
-            }
-            tabelaUsuarios.setDados(filtro.filtrar());
-            setUsuario(null);
         });
     }
 
@@ -66,19 +48,6 @@ public class CriarEmprestimo extends javax.swing.JDialog {
     }
 
     /**
-     * Altera o usuário selecionado para que possa abrir esta janela com algum
-     * usuário selecionado por padrão
-     *
-     * @param livro Usuário selecionado
-     */
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-        detalhesUsuario.setUsuario(usuario);
-        tabelaUsuarios.destacarItem(usuario);
-        aoAlterar();
-    }
-
-    /**
      * Função que será executada quando clicar em algum livro
      *
      * @param livro LivroSimples destacado
@@ -90,21 +59,10 @@ public class CriarEmprestimo extends javax.swing.JDialog {
     }
 
     /**
-     * Função que será executada quando clicar em algum usuário
-     *
-     * @param livro Usuário destacado
-     */
-    public void aoDestacarUsuario(Usuario usuario) {
-        this.usuario = usuario;
-        detalhesUsuario.setUsuario(usuario);
-        aoAlterar();
-    }
-
-    /**
      * Desabilita/habilita o botão OK
      */
     private void aoAlterar() {
-        if (this.usuario == null || this.livro == null) {
+        if (this.livro == null) {
             ok.setEnabled(false);
         } else {
             ok.setEnabled(true);
@@ -121,20 +79,10 @@ public class CriarEmprestimo extends javax.swing.JDialog {
     private void initComponents() {
 
         titulo = new javax.swing.JLabel();
-        usuarioLabel = new javax.swing.JLabel();
-        pesquisarUsuarios = new br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel();
-        tabelaUsuarios = new br.edu.ifpb.gestaobibliotecadigital.views.usuarios.TabelaUsuarios() {
-            @Override
-            protected void onItemDestacado(Usuario item) {
-                aoDestacarUsuario(item);
-            }
-        };
-        detalhesUsuario = new br.edu.ifpb.gestaobibliotecadigital.views.usuarios.DetalhesUsuario();
-        livroLabel = new javax.swing.JLabel();
         pesquisarLivros = new br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel();
         tabelaLivros = new br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros() {
             @Override
-            protected void onItemDestacado(Livro item) {
+            protected void onItemDestacado(br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro item) {
                 aoDestacarLivro(item);
             }
         };
@@ -144,18 +92,12 @@ public class CriarEmprestimo extends javax.swing.JDialog {
         usuarioPanel1 = new br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Novo Empréstimo");
+        setTitle("Reservar Livro");
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(795, 709));
 
         titulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        titulo.setText("Novo Empréstimo");
-
-        usuarioLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        usuarioLabel.setText("Usuário");
-
-        livroLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        livroLabel.setText("Livro");
+        titulo.setText("Reservar Livro");
 
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -179,30 +121,20 @@ public class CriarEmprestimo extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ok, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pesquisarUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tabelaUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(detalhesUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pesquisarLivros, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(tabelaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(detalhesLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usuarioLabel)
-                            .addComponent(livroLabel))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(titulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ok, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -212,22 +144,12 @@ public class CriarEmprestimo extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(titulo)
                     .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addComponent(usuarioLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pesquisarUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(detalhesUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(tabelaUsuarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(livroLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pesquisarLivros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabelaLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(detalhesLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
+                    .addComponent(detalhesLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelar)
@@ -244,13 +166,13 @@ public class CriarEmprestimo extends javax.swing.JDialog {
 
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
         try {
-            emprestimoController.realizarEmprestimo(usuario, livro);
+            emprestimoController.reservarLivro(livro);
             dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this,
                     ex.getMessage(),
-                    "Erro ao realizar empréstimo",
+                    "Erro ao realizar reserva",
                     JOptionPane.ERROR_MESSAGE
             );
         }
@@ -273,21 +195,27 @@ public class CriarEmprestimo extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CriarEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservarLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CriarEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservarLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CriarEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservarLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CriarEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservarLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                CriarEmprestimo dialog = new CriarEmprestimo(new javax.swing.JFrame(), true);
+                ReservarLivro dialog = new ReservarLivro(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -302,15 +230,10 @@ public class CriarEmprestimo extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelar;
     private br.edu.ifpb.gestaobibliotecadigital.views.livros.DetalhesLivro detalhesLivro;
-    private br.edu.ifpb.gestaobibliotecadigital.views.usuarios.DetalhesUsuario detalhesUsuario;
-    private javax.swing.JLabel livroLabel;
     private javax.swing.JButton ok;
     private br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel pesquisarLivros;
-    private br.edu.ifpb.gestaobibliotecadigital.views.components.PesquisarPanel pesquisarUsuarios;
     private br.edu.ifpb.gestaobibliotecadigital.views.livros.TabelaLivros tabelaLivros;
-    private br.edu.ifpb.gestaobibliotecadigital.views.usuarios.TabelaUsuarios tabelaUsuarios;
     private javax.swing.JLabel titulo;
-    private javax.swing.JLabel usuarioLabel;
     private br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel usuarioPanel1;
     // End of variables declaration//GEN-END:variables
 }

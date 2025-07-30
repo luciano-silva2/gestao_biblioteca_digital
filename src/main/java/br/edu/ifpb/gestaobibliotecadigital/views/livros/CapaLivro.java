@@ -7,6 +7,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
 
 public class CapaLivro extends javax.swing.JPanel {
 
@@ -17,6 +18,32 @@ public class CapaLivro extends javax.swing.JPanel {
         setLivro(null);
     }
 
+    private void resetCapa() {
+        capaDoLivro.setIcon(null);
+        capaDoLivro.setText(null);
+        capaDoLivro.setToolTipText(null);
+    }
+
+    private void setCapaIndisponivel() {
+        capaDoLivro.setIcon(null);
+        capaDoLivro.setText("Indisponível");
+        capaDoLivro.setToolTipText(null);
+    }
+
+    private void carregarCapa(String urlString) {
+
+        try {
+            URL url = new URL(urlString);
+            ImageIcon original = new ImageIcon(url);
+            Image capa = original.getImage().getScaledInstance(199, 231, Image.SCALE_SMOOTH);
+            capaDoLivro.setIcon(new ImageIcon(capa));
+            capaDoLivro.setText(null);
+            capaDoLivro.setToolTipText(livro.getTitulo());
+        } catch (MalformedURLException e) {
+            setCapaIndisponivel();
+        }
+    }
+
     /**
      * Atualiza o livro selecionado
      *
@@ -25,25 +52,21 @@ public class CapaLivro extends javax.swing.JPanel {
     public void setLivro(Livro livro) {
         this.livro = livro;
 
-        // Limpa sempre ao começar
-        capaDoLivro.setIcon(null);
-        capaDoLivro.setText("Indisponível");
+        resetCapa();
+
         if (livro == null) {
-            capaDoLivro.setText("Indisponível");
-        } else {
-            if (livro instanceof LivroComCapaAlternativa livroComCapa) {
-                try {
-                    ImageIcon iconOriginal = new ImageIcon(new URL(livroComCapa.getUrlCapa()));
-                    Image imgReduzida = iconOriginal.getImage().getScaledInstance(186, 200, Image.SCALE_SMOOTH);
-                    capaDoLivro.setIcon(new ImageIcon(imgReduzida));
-                    capaDoLivro.setText(null);
-                } catch (MalformedURLException e) {
-                    capaDoLivro.setIcon(null);
-                    capaDoLivro.setText("Indisponível");
-                }
-                capaDoLivro.setText(livroComCapa.getUrlCapa());
-            }
+            setCapaIndisponivel();
+            return;
         }
+
+        LivroComCapaAlternativa livroComCapa = Helpers.getLivroComDecorador(livro, LivroComCapaAlternativa.class);
+
+        if (livroComCapa == null) {
+            setCapaIndisponivel();
+            return;
+        }
+
+        carregarCapa(livroComCapa.getUrlCapa());
     }
 
     /**
@@ -65,7 +88,9 @@ public class CapaLivro extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(capaDoLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(capaDoLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         capaDoLivro.setHorizontalAlignment(SwingConstants.CENTER);

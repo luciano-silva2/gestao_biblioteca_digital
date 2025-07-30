@@ -4,6 +4,7 @@ import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
 import java.util.List;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 
 public class ReservaFiltro extends Filtro<Reserva> {
 
@@ -13,6 +14,11 @@ public class ReservaFiltro extends Filtro<Reserva> {
 
     public ReservaFiltro(List<Reserva> reservas) {
         super(reservas);
+    }
+
+    public ReservaFiltro porUsuario(Usuario usuario) {
+        filtros.add(reserva -> reserva.getUsuario().getId().equals(usuario.getId()));
+        return this;
     }
 
     public ReservaFiltro porNomeUsuario(String nome) {

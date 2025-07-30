@@ -14,17 +14,19 @@ public class ColecaoService {
     private final ColecaoRepository colecaoRepository = ColecaoRepository.getInstance();
     private static final Logger logger = Logger.getLogger(ColecaoService.class.getName());
 
-    public List<Colecao> listarColecoes() {
-        return colecaoRepository.listar();
-    }
-
-    public void criarColecao(Colecao colecao) {
-        logger.log(Level.INFO, "Criando coleção: {0}", colecao.getNome());
+    public void registrarNovaColecao(Colecao colecao) {
+        logger.log(Level.INFO, "Registrando nova coleção: {0}", colecao.getNome());
         colecaoRepository.adicionar(colecao);
     }
 
-    // Conveter os livros dentro de uma coleção
-    public List<Livro> listarLivrosDeColecao(Colecao colecao) {
+    public void registrarColecaoComLivros(Colecao colecao, List<Livro> livros) {
+        for (Livro livro : livros) {
+            colecao.adicionar(livro);
+        }
+        colecaoRepository.atualizar(colecao);
+    }
+
+    public List<Livro> obterLivrosDaColecao(Colecao colecao) {
         return colecao == null ? new ArrayList<>()
                 : colecao.getItens().stream()
                         .filter(Livro.class::isInstance)
@@ -32,12 +34,12 @@ public class ColecaoService {
                         .toList();
     }
 
-    public void adicionarLivroAColecao(Colecao colecao, Livro livro) {
+    public void adicionarLivroNaColecao(Colecao colecao, Livro livro) {
         if (livro == null) {
             throw new IllegalArgumentException("Livro não pode ser nulo.");
         }
 
-        LivroFiltro livroFiltro = new LivroFiltro(listarLivrosDeColecao(colecao));
+        LivroFiltro livroFiltro = new LivroFiltro(obterLivrosDaColecao(colecao));
         List<Livro> resultados = livroFiltro.porLivro(livro.getISBN()).filtrar();
 
         if (!resultados.isEmpty()) {
@@ -45,17 +47,16 @@ public class ColecaoService {
         }
 
         colecao.adicionar(livro);
-        logger.log(Level.INFO, "Adicionado à coleção: {0}", livro.getTitulo());
+        logger.log(Level.INFO, "Livro adicionado à coleção: {0}", livro.getTitulo());
         colecaoRepository.atualizar(colecao);
     }
 
-    public void remover(Colecao colecao) {
+    public void excluirColecao(Colecao colecao) {
         colecaoRepository.excluir(colecao);
     }
 
-    public void removerDaColecao(Colecao colecao, Livro livro) {
+    public void removerLivroDaColecao(Colecao colecao, Livro livro) {
         colecao.remover(livro);
         colecaoRepository.atualizar(colecao);
     }
-
 }

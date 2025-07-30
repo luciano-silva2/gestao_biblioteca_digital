@@ -83,8 +83,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="senhaInput" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="usuarioNivel" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="senhaInput" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -114,8 +114,6 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nomeInput">
-    </Component>
-    <Component class="javax.swing.JTextField" name="senhaInput">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -177,6 +175,8 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Tipo:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="senhaInput">
     </Component>
   </SubComponents>
 </Form>

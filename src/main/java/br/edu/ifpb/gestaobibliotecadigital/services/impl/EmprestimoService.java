@@ -1,5 +1,7 @@
 package br.edu.ifpb.gestaobibliotecadigital.services.impl;
 
+import br.edu.ifpb.gestaobibliotecadigital.filters.EmprestimoFiltro;
+import br.edu.ifpb.gestaobibliotecadigital.filters.ReservaFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.EmprestimoPadrao;
@@ -29,6 +31,22 @@ public class EmprestimoService {
     private final LivroRepository livroRepository = LivroRepository.getInstance();
     private final HistoricoRepository historicoRepository = HistoricoRepository.getInstance();
     private final NotificacaoObserver notificacao = NotificacaoObserver.getInstance();
+
+    public List<Emprestimo> listarEmprestimosUsuario(Usuario usuario) {
+        return new EmprestimoFiltro(emprestimoRepository.listar()).porUsuario(usuario).filtrar();
+    }
+
+    public List<Emprestimo> listarTodosEmprestimos() {
+        return emprestimoRepository.listar();
+    }
+
+    public List<Reserva> listarReservasUsuario(Usuario usuario) {
+        return new ReservaFiltro(reservaRepository.listar()).porUsuario(usuario).filtrar();
+    }
+
+    public List<Reserva> listarTodasReservas() {
+        return reservaRepository.listar();
+    }
 
     public Emprestimo solicitarEmprestimo(Usuario usuario, Livro livro) {
         if (livroEstaEmprestado(livro)) {
@@ -184,7 +202,6 @@ public class EmprestimoService {
 //        livrosMaisEmprestados.forEach(entry -> {
 //            System.out.println("LivroSimples: " + entry.getKey().getTitulo() + " - Empréstimos: " + entry.getValue());
 //        });
-
         return livrosMaisEmprestados;
     }
 }

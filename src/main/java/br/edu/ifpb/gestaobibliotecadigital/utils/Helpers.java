@@ -1,5 +1,7 @@
 package br.edu.ifpb.gestaobibliotecadigital.utils;
 
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroDecorator;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -57,6 +59,16 @@ public class Helpers {
             return resultado;
         }
         return CATEGORIAS.clone();
+    }
+
+    public static <T extends Livro> T getLivroComDecorador(Livro livro, Class<T> tipo) {
+        while (livro instanceof LivroDecorator decorator) {
+            if (tipo.isInstance(livro)) {
+                return tipo.cast(livro);
+            }
+            livro = decorator.getLivro();
+        }
+        return null;
     }
 
     /**

@@ -2,17 +2,23 @@ package br.edu.ifpb.gestaobibliotecadigital.views.reservas;
 
 import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
+import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Administrador;
+import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
+import br.edu.ifpb.gestaobibliotecadigital.session.UserSessionManager;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
+import java.awt.Dialog;
 import javax.swing.JOptionPane;
 
 public class AcoesReserva extends javax.swing.JPanel {
 
+    private Usuario usuarioLogado = UserSessionManager.getInstance().getUsuarioLogado();
     private Reserva reserva;
     public final UpdateObserver events = new UpdateObserver();
     private final EmprestimoController emprestimoController = new EmprestimoController();
 
     public AcoesReserva() {
         initComponents();
+        initBotoes();
     }
 
     /**
@@ -23,6 +29,16 @@ public class AcoesReserva extends javax.swing.JPanel {
 
         remover.setEnabled(reserva != null);
         cancelar.setEnabled(reserva != null && !reserva.encerrada());
+    }
+
+    /**
+     * Oculta botões de ações como adicionar/remover/devolver/multa paga para
+     * usuários comuns
+     */
+    private void initBotoes() {
+        Usuario usuarioLogado = UserSessionManager.getInstance().getUsuarioLogado();
+        boolean isAdmin = usuarioLogado != null && usuarioLogado instanceof Administrador;
+        remover.setVisible(isAdmin);
     }
 
     /**
@@ -121,7 +137,12 @@ public class AcoesReserva extends javax.swing.JPanel {
     }//GEN-LAST:event_removerActionPerformed
 
     private void adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarActionPerformed
-        CriarReserva criarReservaDialog = new CriarReserva(null, true);
+        Dialog criarReservaDialog; 
+        if (usuarioLogado instanceof Administrador) {
+            criarReservaDialog = new CriarReserva(null, true);
+        } else {
+            criarReservaDialog = new ReservarLivro(null, true);
+        }
         criarReservaDialog.setVisible(true);
         events.emit();
     }//GEN-LAST:event_adicionarActionPerformed

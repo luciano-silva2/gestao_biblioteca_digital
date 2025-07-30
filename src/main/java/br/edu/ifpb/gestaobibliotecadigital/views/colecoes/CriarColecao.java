@@ -1,5 +1,6 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.colecoes;
 
+import br.edu.ifpb.gestaobibliotecadigital.controllers.ColecaoController;
 import br.edu.ifpb.gestaobibliotecadigital.filters.ColecaoFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.filters.LivroFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Colecao;
@@ -13,7 +14,7 @@ import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
 
 public class CriarColecao extends javax.swing.JDialog {
 
-    private final ColecaoService colecaoService = new ColecaoService();
+    private final ColecaoController colecaoController = new ColecaoController();
     private final LivroRepository livroRepository = LivroRepository.getInstance();
     private final ColecaoRepository colecaoRepository = ColecaoRepository.getInstance();
 
@@ -267,7 +268,7 @@ public class CriarColecao extends javax.swing.JDialog {
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
 
         try {
-            colecaoService.adicionarLivroAColecao(colecao, livro);
+            colecaoController.adicionarLivroNaColecao(colecao, livro);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this,
@@ -289,7 +290,7 @@ public class CriarColecao extends javax.swing.JDialog {
         }
 
         try {
-            colecaoService.criarColecao(new Colecao(nome));
+            colecaoController.criar(new Colecao(nome));
             JOptionPane.showMessageDialog(
                     this,
                     "Coleção salva com sucesso!",

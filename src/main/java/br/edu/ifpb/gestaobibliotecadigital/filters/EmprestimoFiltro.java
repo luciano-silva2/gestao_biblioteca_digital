@@ -4,6 +4,7 @@ import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.utils.Helpers;
 import java.util.List;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
 
 public class EmprestimoFiltro extends Filtro<Emprestimo> {
 
@@ -17,6 +18,11 @@ public class EmprestimoFiltro extends Filtro<Emprestimo> {
 
     public EmprestimoFiltro porLivro(Livro livro) {
         filtros.add(emprestimo -> emprestimo.getLivro().getId().equals(livro.getId()));
+        return this;
+    }
+
+    public EmprestimoFiltro porUsuario(Usuario usuario) {
+        filtros.add(emprestimo -> emprestimo.getUsuario().getId().equals(usuario.getId()));
         return this;
     }
 

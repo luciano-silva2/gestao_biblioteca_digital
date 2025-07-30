@@ -23,14 +23,16 @@ public class DetalhesLivro extends javax.swing.JPanel {
 
         if (livro == null) {
             nomeLivro.setText(" ");
+            anoPublicacao.setText(" ");
+            nomeEditora.setText(" ");
         } else {
             String texto = livro.getTitulo();
             if (texto.length() > 45) {
                 texto = livro.getTitulo().substring(0, 40) + "...";
             }
             nomeLivro.setText(texto);
-            anoPublicacao.setText(Formatter.of(livro.getAno()).toString());
-            nomeEditora.setText(livro.getEditora());
+            anoPublicacao.setText("Ano de Publicação: " + Formatter.of(livro.getAno()).toString());
+            nomeEditora.setText("Nome da editora: " + livro.getEditora());
         }
     }
 

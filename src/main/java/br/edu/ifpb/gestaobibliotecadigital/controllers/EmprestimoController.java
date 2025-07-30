@@ -7,11 +7,32 @@ import br.edu.ifpb.gestaobibliotecadigital.observers.Notificacao;
 import br.edu.ifpb.gestaobibliotecadigital.observers.NotificacaoObserver;
 import br.edu.ifpb.gestaobibliotecadigital.services.impl.EmprestimoService;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import java.util.List;
 
 public class EmprestimoController extends Controller {
 
     private final EmprestimoService emprestimoService = new EmprestimoService();
     private final NotificacaoObserver notificacao = NotificacaoObserver.getInstance();
+
+    public List<Emprestimo> listarEmprestimos() {
+        verificaUsuarioLogado();
+
+        if (isAdmin()) {
+            return emprestimoService.listarTodosEmprestimos();
+        } else {
+            return emprestimoService.listarEmprestimosUsuario(usuarioLogado);
+        }
+    }
+    
+    public List<Reserva> listarReservas() {
+        verificaUsuarioLogado();
+
+        if (isAdmin()) {
+            return emprestimoService.listarTodasReservas();
+        } else {
+            return emprestimoService.listarReservasUsuario(usuarioLogado);
+        }
+    }
 
     public void realizarEmprestimo(Usuario usuario, Livro livro) {
         verificaUsuarioLogado();

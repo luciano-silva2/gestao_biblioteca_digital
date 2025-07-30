@@ -2,7 +2,9 @@ package br.edu.ifpb.gestaobibliotecadigital.views.emprestimos;
 
 import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
+import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Administrador;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Usuario;
+import br.edu.ifpb.gestaobibliotecadigital.session.UserSessionManager;
 import br.edu.ifpb.gestaobibliotecadigital.views.components.UpdateObserver;
 import javax.swing.JOptionPane;
 
@@ -14,6 +16,7 @@ public class AcoesEmprestimo extends javax.swing.JPanel {
 
     public AcoesEmprestimo() {
         initComponents();
+        initBotoes();
     }
 
     /**
@@ -26,6 +29,19 @@ public class AcoesEmprestimo extends javax.swing.JPanel {
         devolver.setEnabled(emprestimo != null && !emprestimo.foiDevolvido());
         multaPaga.setEnabled(emprestimo != null && emprestimo.foiDevolvido() && emprestimo.temMultaPendente());
         renovar.setEnabled(emprestimo != null && emprestimo.podeRenovar());
+    }
+
+    /**
+     * Oculta botões de ações como adicionar/remover/devolver/multa paga para
+     * usuários comuns
+     */
+    private void initBotoes() {
+        Usuario usuarioLogado = UserSessionManager.getInstance().getUsuarioLogado();
+        boolean isAdmin = usuarioLogado != null && usuarioLogado instanceof Administrador;
+        adicionar.setVisible(isAdmin);
+        remover.setVisible(isAdmin);
+        devolver.setVisible(isAdmin);
+        multaPaga.setVisible(isAdmin);
     }
 
     /**
@@ -100,12 +116,12 @@ public class AcoesEmprestimo extends javax.swing.JPanel {
                 .addComponent(adicionar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(remover)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(devolver)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(renovar)
+                .addComponent(multaPaga)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(multaPaga))
+                .addComponent(renovar))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

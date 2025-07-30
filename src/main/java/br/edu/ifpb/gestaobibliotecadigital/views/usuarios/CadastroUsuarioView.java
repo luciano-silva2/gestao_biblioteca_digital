@@ -33,7 +33,6 @@ public class CadastroUsuarioView extends javax.swing.JFrame {
         loginButton = new javax.swing.JButton();
         cadastrarButton = new javax.swing.JButton();
         nomeInput = new javax.swing.JTextField();
-        senhaInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         usernameInput = new javax.swing.JTextField();
         usuarioNivel = new javax.swing.JComboBox<>();
@@ -41,6 +40,7 @@ public class CadastroUsuarioView extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        senhaInput = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,8 +133,8 @@ public class CadastroUsuarioView extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(senhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usuarioNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usuarioNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(senhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(62, 62, 62)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
@@ -155,11 +155,21 @@ public class CadastroUsuarioView extends javax.swing.JFrame {
                 
         String nome = nomeInput.getText();
         String username = usernameInput.getText();
-        String senha = senhaInput.getText();
+        String senha = new String(senhaInput.getPassword()).trim();
         String nivel = usuarioNivel.getSelectedItem().toString();
 
-        boolean cadastrado = cadastroService.cadastrar(nome, username, senha, nivel);
+       if(senha.length() < 8){
+            JOptionPane.showMessageDialog(this, "A senha deve ter pelo menos 8 digitos");
+            return;
+        }
 
+        if(nome.isEmpty() || username.isEmpty() || senha.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios.", "Campos obrigatórios", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        boolean cadastrado = cadastroService.cadastrar(nome, username, senha, nivel);
+        
         if (cadastrado) {
             JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
             this.dispose();
@@ -219,7 +229,7 @@ public class CadastroUsuarioView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField nomeInput;
-    private javax.swing.JTextField senhaInput;
+    private javax.swing.JPasswordField senhaInput;
     private javax.swing.JTextField usernameInput;
     private javax.swing.JComboBox<String> usuarioNivel;
     // End of variables declaration//GEN-END:variables

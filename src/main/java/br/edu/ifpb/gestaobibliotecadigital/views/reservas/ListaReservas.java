@@ -1,27 +1,27 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.reservas;
 
-import br.edu.ifpb.gestaobibliotecadigital.views.reservas.*;
+import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.filters.ReservaFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
-import br.edu.ifpb.gestaobibliotecadigital.repositories.ReservaRepository;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ListaReservas extends javax.swing.JFrame {
-
-    private final ReservaRepository reservaRepository = ReservaRepository.getInstance();
-    private List<Reserva> listaReservas = reservaRepository.listar();
+    private final EmprestimoController emprestimoController = new EmprestimoController();
+    private List<Reserva> listaReservas;
     private String pesquisa = "";
     private ReservaFiltro filtro = new ReservaFiltro();
 
     public ListaReservas() {
         initComponents();
+        atualizarListaReservas();
 
         // Define os dados na tabela
         tabelaReservas.setDados(listaReservas);
 
         // Atualiza a lista de reservas quando houver alguma alteração
         acoesReserva.events.onUpdate(() -> {
-            listaReservas = reservaRepository.listar();
+            atualizarListaReservas();
             filtrar();
         });
 
@@ -36,6 +36,18 @@ public class ListaReservas extends javax.swing.JFrame {
             filtro = pesquisaAvancadaReservas.getFiltro();
             filtrar();
         });
+    }
+    
+     /**
+     * Atualiza a lista de reservas
+     */
+    private void atualizarListaReservas() {
+        try {
+            listaReservas = emprestimoController.listarReservas();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao listar reservas", JOptionPane.ERROR_MESSAGE);
+            throw ex;
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ public class AcoesLivro extends javax.swing.JPanel {
     public void setLivro(Livro livro) {
         this.livro = livro;
 
+        comentar.setEnabled(livro != null);
         remover.setEnabled(livro != null);
         editar.setEnabled(livro != null);
     }
@@ -67,7 +68,7 @@ public class AcoesLivro extends javax.swing.JPanel {
         });
 
         editar.setText("Editar");
-        editar.setEnabled(PermissaoProxy.podeEditarLivro());
+        editar.setVisible(PermissaoProxy.podeEditarLivro());
         editar.setEnabled(false);
         editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +83,7 @@ public class AcoesLivro extends javax.swing.JPanel {
                 comentarActionPerformed(evt);
             }
         });
+        comentar.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

@@ -4,17 +4,25 @@ import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Reserva;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.EmprestimoPadrao;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.estrategias.EmprestimoPremium;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.Colecao;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.LivroSimples;
 import br.edu.ifpb.gestaobibliotecadigital.models.livros.Livro;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroComCapaAlternativa;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroComResumoEstendido;
+import br.edu.ifpb.gestaobibliotecadigital.models.livros.decorators.LivroComTag;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.Administrador;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.LeitorComum;
 import br.edu.ifpb.gestaobibliotecadigital.models.usuarios.LeitorPremium;
+import br.edu.ifpb.gestaobibliotecadigital.repositories.ColecaoRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.EmprestimoRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.HistoricoRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.LivroRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.ReservaRepository;
 import br.edu.ifpb.gestaobibliotecadigital.repositories.UsuarioRepository;
+import br.edu.ifpb.gestaobibliotecadigital.services.impl.ColecaoService;
 import br.edu.ifpb.gestaobibliotecadigital.utils.DataProvider;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class Seed {
@@ -24,6 +32,8 @@ public class Seed {
     private static final LivroRepository livroRepository = LivroRepository.getInstance();
     private static final HistoricoRepository historicoRepository = HistoricoRepository.getInstance();
     private static final UsuarioRepository usuarioRepository = UsuarioRepository.getInstance();
+    private static final ColecaoRepository colecaoRepository = ColecaoRepository.getInstance();
+    private static final ColecaoService colecaoService = new ColecaoService();
 
     public static void main(String[] args) {
         executarSeed();
@@ -36,200 +46,388 @@ public class Seed {
         emprestimoRepository.resetar();
         historicoRepository.resetar();
         reservaRepository.resetar();
+        colecaoRepository.resetar();
 
         System.out.println("[SEED] Criando livros...");
 
-        Livro padroeDeProjeto = new LivroSimples.Builder("978-8573076103")
-                .setTitulo("Padrões de Projetos: Soluções Reutilizáveis de Software Orientados a Objetos")
-                .setAutor("Erich Gamma")
-                .setAno(2000)
-                .setEditora("Bookman")
-                .setSinopse("Catálogo de soluções simples e sucintas para os problemas mais frequentes na área de projeto.")
-                .setCategoria("Tecnologia")
-                .build();
+        Livro padraoDeProjeto = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8573076103")
+                                        .setTitulo("Padrões de Projetos: Soluções Reutilizáveis de Software Orientados a Objetos")
+                                        .setAutor("Erich Gamma")
+                                        .setAno(2000)
+                                        .setEditora("Bookman")
+                                        .setSinopse("Catálogo de soluções simples e sucintas para os problemas mais frequentes na área de projeto.")
+                                        .setCategoria("Tecnologia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51bO3rI8hEL._SY445_SX342_.jpg"
+                        ),
+                        "Este livro clássico apresenta 23 padrões de projeto essenciais para o desenvolvimento de software orientado a objetos, oferecendo soluções testadas e comprovadas para problemas comuns de design. É uma leitura fundamental para arquitetos e desenvolvedores de software."
+                ),
+                Arrays.asList("Design Patterns", "Orientação a Objetos", "Engenharia de Software", "GoF")
+        );
 
-        Livro useCabecaJava = new LivroSimples.Builder("978-8550819884")
-                .setTitulo("Use a Cabeça Java – 3ª Edição: Guia do Aprendiz Para Programação no Mundo Real")
-                .setAutor("Kathy Sierra")
-                .setAno(2024)
-                .setEditora("Alta Books")
-                .setSinopse("Experiência completa de aprendizado em Java e programação orientada a objetos.")
-                .setCategoria("Tecnologia")
-                .build();
+        Livro useCabecaJava = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8550819884")
+                                        .setTitulo("Use a Cabeça Java – 3ª Edição: Guia do Aprendiz Para Programação no Mundo Real")
+                                        .setAutor("Kathy Sierra")
+                                        .setAno(2024)
+                                        .setEditora("Alta Books")
+                                        .setSinopse("Experiência completa de aprendizado em Java e programação orientada a objetos.")
+                                        .setCategoria("Tecnologia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/41sWiXSdGTL._SY445_SX342_.jpg"
+                        ),
+                        "Um guia completo e divertido para aprender Java e programação orientada a objetos, com uma abordagem visual e didática que facilita o entendimento de conceitos complexos."
+                ),
+                Arrays.asList("Java", "Programação", "Orientação a Objetos", "Aprendizado")
+        );
 
-        Livro entendendoAlgoritmos = new LivroSimples.Builder("978-8575225639")
-                .setTitulo("Entendendo Algoritmos")
-                .setAutor("Kathy Sierra")
-                .setAno(2017)
-                .setEditora("Novatec")
-                .setSinopse("Introdução prática aos algoritmos mais utilizados.")
-                .setCategoria("Tecnologia")
-                .build();
+        Livro entendendoAlgoritmos = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8575225639")
+                                        .setTitulo("Entendendo Algoritmos")
+                                        .setAutor("Aditya Y. Bhargava")
+                                        .setAno(2017)
+                                        .setEditora("Novatec")
+                                        .setSinopse("Introdução prática aos algoritmos mais utilizados.")
+                                        .setCategoria("Tecnologia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/517I6z9QK4L._SY445_SX342_.jpg"
+                        ),
+                        "Uma introdução prática e ilustrada aos algoritmos mais comuns, como busca, ordenação e grafos, explicando conceitos complexos de forma acessível para iniciantes."
+                ),
+                Arrays.asList("Algoritmos", "Estrutura de Dados", "Programação", "Computação")
+        );
 
-        Livro senhorDosAneisParte1 = new LivroSimples.Builder("978-8595084759")
-                .setTitulo("O Senhor dos Anéis: A Sociedade do Anel")
-                .setAutor("J.R.R. Tolkien")
-                .setAno(2019)
-                .setEditora("HarperCollins")
-                .setSinopse("Bilbo deixa o Condado para Frodo iniciar uma jornada pela Terra-média.")
-                .setCategoria("Fantasia")
-                .build();
+        Livro oHobbit = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595084742")
+                                        .setTitulo("O Hobbit")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("Bilbo Bolseiro era um dos mais respeitáveis hobbits de todo o Condado até que, um dia, o mago Gandalf bate à sua porta. A partir de então, toda sua vida pacata e campestre soprando anéis de fumaça com seu belo cachimbo começa a mudar.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/91M9xPIf10L._SY385_.jpg"
+                        ),
+                        "Esta jornada fará Bilbo, Gandalf e 13 anãos atravessarem a Terra-média, passando por inúmeros perigos, como os imensos trols, as Montanhas Nevoentas infestadas de gobelins ou a muito antiga e misteriosa Trevamata, até chegarem (se conseguirem) na Montanha Solitária. Lá está um incalculável tesouro, mas há um porém. Deitado em cima dele está Smaug, o Dourado, um dragão malicioso que... bem, você terá que ler para descobrir."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Aventura", "Tolkien", "O Senhor dos Anéis", "Terra-média")
+        );
 
-        Livro senhorDosAneisParte2 = new LivroSimples.Builder("978-8595084766")
-                .setTitulo("O Senhor dos Anéis: As duas torres")
-                .setAutor("J.R.R. Tolkien")
-                .setAno(2019)
-                .setEditora("HarperCollins")
-                .setSinopse("A jornada continua com Legolas, Gimli e Aragorn tentando resgatar os hobbits.")
-                .setCategoria("Fantasia")
-                .build();
+        Livro senhorDosAneisParte1 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595084759")
+                                        .setTitulo("O Senhor dos Anéis: A Sociedade do Anel")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("Bilbo deixa o Condado para Frodo iniciar uma jornada pela Terra-média.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/41RBd2DvmgL._SY445_SX342_.jpg"
+                        ),
+                        "O primeiro volume da épica trilogia de J.R.R. Tolkien, que narra o início da jornada de Frodo Bolseiro para destruir o Um Anel e salvar a Terra-média das forças de Sauron."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Aventura", "Tolkien")
+        );
 
-        Livro senhorDosAneisParte3 = new LivroSimples.Builder("978-8595084773")
-                .setTitulo("O Senhor dos Anéis: O retorno do rei")
-                .setAutor("J.R.R. Tolkien")
-                .setAno(2019)
-                .setEditora("HarperCollins")
-                .setSinopse("Sam e Frodo enfrentam o desafio final em Mordor.")
-                .setCategoria("Fantasia")
-                .build();
-//        Novros livros
-        Livro diarioBanana1 = new LivroSimples.Builder("978-8576831303")
-                .setTitulo("Diário de um Banana 1")
-                .setAutor("Jeff Kinney")
-                .setAno(2008)
-                .setEditora("VR Editora")
-                .setSinopse("Não é fácil ser criança. E ninguém sabe disso melhor do que Greg Heffley, que se vê mergulhado no mundo do ensino fundamental.")
-                .setCategoria("Infantil")
-                .build();
+        Livro senhorDosAneisParte2 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595084766")
+                                        .setTitulo("O Senhor dos Anéis: As duas torres")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("A jornada continua com Legolas, Gimli e Aragorn tentando resgatar os hobbits.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/81lQ5N0QwJL._SY385_.jpg"
+                        ),
+                        "A segunda parte da saga de O Senhor dos Anéis, onde a Sociedade se divide e os caminhos de seus membros se entrelaçam em meio à guerra iminente contra as forças das trevas."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Guerra", "Terra-média")
+        );
 
-        Livro diarioBanana2 = new LivroSimples.Builder("978-8576831952")
-                .setTitulo("Diário de um Banana 2: Rodrick é o cara")
-                .setAutor("Jeff Kinney")
-                .setAno(2009)
-                .setEditora("VR Editora")
-                .setSinopse("Faça o que quiser, só não pergunte a Greg Heffley como foram suas férias de verão, porque ele realmente não quer falar sobre isso.")
-                .setCategoria("Infantil")
-                .build();
+        Livro senhorDosAneisParte3 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595084773")
+                                        .setTitulo("O Senhor dos Anéis: O retorno do rei")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("Sam e Frodo enfrentam o desafio final em Mordor.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/41KWSPU9wcL._SY445_SX342_.jpg"
+                        ),
+                        "O clímax da trilogia, onde o destino da Terra-média é selado na batalha final contra Sauron, enquanto Frodo e Sam enfrentam o desafio supremo em Mordor."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Conclusão", "Jornada")
+        );
 
-        Livro diarioBanana3 = new LivroSimples.Builder("978-8576832294")
-                .setTitulo("Diário de um Banana 3: A gota d’água")
-                .setAutor("Jeff Kinney")
-                .setAno(2010)
-                .setEditora("VR Editora")
-                .setSinopse("Greg não toma jeito mesmo. E a cada dia se envolve em mais confusão. O difícil é fazer seu pai engolir esse talento de Greg para se meter em situações embaraçosas.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana1 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576831303")
+                                        .setTitulo("Diário de um Banana 1")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2008)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Não é fácil ser criança. E ninguém sabe disso melhor do que Greg Heffley, que se vê mergulhado no mundo do ensino fundamental.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/71fWaI5myqL._SY385_.jpg"
+                        ),
+                        "O primeiro livro da popular série que acompanha as hilárias desventuras de Greg Heffley no ensino fundamental, contadas através de seu diário com textos e desenhos."
+                ),
+                Arrays.asList("Infantil", "Humor", "Diário", "Quadrinhos")
+        );
 
-        Livro diarioBanana4 = new LivroSimples.Builder("978-8576832768")
-                .setTitulo("Diário de um Banana. Dias de Cão - Volume 4")
-                .setAutor("Jeff Kinney")
-                .setAno(2011)
-                .setEditora("Vergara e Riba")
-                .setSinopse("Férias de verão: o tempo está lindo, e toda garotada está se divertindo ao ar livre. Onde está Greg Heffley?")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana2 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576831952")
+                                        .setTitulo("Diário de um Banana 2: Rodrick é o cara")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2009)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Faça o que quiser, só não pergunte a Greg Heffley como foram suas férias de verão, porque ele realmente não quer falar sobre isso.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51opwNLjX+L._SY445_SX342_.jpg"
+                        ),
+                        "A segunda aventura de Greg Heffley, onde ele tenta manter um segredo embaraçoso de verão longe de todos, especialmente de seu irmão mais velho, Rodrick."
+                ),
+                Arrays.asList("Infantil", "Humor", "Família", "Segredos")
+        );
 
-        Livro diarioBanana5 = new LivroSimples.Builder("978-8576832768")
-                .setTitulo("Diário de um Banana 5: A verdade nua e crua")
-                .setAutor("Jeff Kinney")
-                .setAno(2011)
-                .setEditora("VR Editora")
-                .setSinopse("Greg Heffley sem quis crescer logo. Mas será que ficar mais velho é tão legal assim? De repente, Greg começa a lidar com as pressões das festas de meninos e meninas.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana3 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576832294")
+                                        .setTitulo("Diário de um Banana 3: A gota d’água")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2010)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Greg não toma jeito mesmo. E a cada dia se envolve em mais confusão. O difícil é fazer seu pai engolir esse talento de Greg para se meter em situações embaraçosas.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51aNcPvjetL._SY445_SX342_.jpg"
+                        ),
+                        "Greg Heffley e seu pai enfrentam uma batalha de vontades, enquanto o pai de Greg tenta, sem sucesso, endireitar o filho e fazê-lo se interessar por atividades 'masculinas'."
+                ),
+                Arrays.asList("Infantil", "Humor", "Família", "Crescimento")
+        );
 
-        Livro diarioBanana6 = new LivroSimples.Builder("978-8576833680")
-                .setTitulo("Diário de um Banana 6: Casa dos horrores")
-                .setAutor("Jeff Kinney")
-                .setAno(2011)
-                .setEditora("VR Editora")
-                .setSinopse("Em sua sexta aventura, Greg Heffley passará por grandes apuros. As coisas para ele vão de mal a pior, tanto na escola como em sua casa. Greg será suspeito de vandalismo e se tornará um suposto foragido da polícia.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana4 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576832768")
+                                        .setTitulo("Diário de um Banana. Dias de Cão - Volume 4")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2011)
+                                        .setEditora("Vergara e Riba")
+                                        .setSinopse("Férias de verão: o tempo está lindo, e toda garotada está se divertindo ao ar livre. Onde está Greg Heffley?")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/41XZpFdwsLL._SY445_SX342_.jpg"
+                        ),
+                        "As férias de verão de Greg Heffley se transformam em um desastre hilário, com planos frustrados e desventuras que o mantêm longe do sol e da diversão ao ar livre."
+                ),
+                Arrays.asList("Infantil", "Humor", "Férias", "Verão")
+        );
+        Livro diarioBanana5 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576832768")
+                                        .setTitulo("Diário de um Banana 5: A verdade nua e crua")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2011)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Greg Heffley sem quis crescer logo. Mas será que ficar mais velho é tão legal assim? De repente, Greg começa a lidar com as pressões das festas de meninos e meninas.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51JxKoUmSBL._SY445_SX342_.jpg"
+                        ),
+                        "Greg Heffley enfrenta os desafios de crescer, incluindo as pressões sociais, festas e as inevitáveis e embaraçosas mudanças da adolescência."
+                ),
+                Arrays.asList("Infantil", "Adolescência", "Humor", "Crescer")
+        );
 
-        Livro diarioBanana7 = new LivroSimples.Builder("978-8576834847")
-                .setTitulo("Diário de um Banana 7: Segurando vela")
-                .setAutor("Jeff Kinney")
-                .setAno(2013)
-                .setEditora("VR Editora")
-                .setSinopse("O Dia dos Namorados está chegando e Greg Heffley continua sozinho. Mas um baile organizado pela escola pode mudar tudo. Ele precisa encontrar uma garota urgente. Para isso, conta com a ajuda de outro solteirão, Rowley, seu melhor amigo.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana6 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576833680")
+                                        .setTitulo("Diário de um Banana 6: Casa dos horrores")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2011)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Em sua sexta aventura, Greg Heffley passará por grandes apuros. As coisas para ele vão de mal a pior, tanto na escola como em sua casa. Greg será suspeito de vandalismo e se tornará um suposto foragido da polícia.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/71beaUwsF0L._SY385_.jpg"
+                        ),
+                        "Uma nevasca prende Greg Heffley e sua família em casa, transformando o lar em um caos e levando Greg a ser suspeito de vandalismo."
+                ),
+                Arrays.asList("Infantil", "Humor", "Neve", "Aventura Doméstica")
+        );
 
-        Livro diarioBanana8 = new LivroSimples.Builder("978-8576836902")
-                .setTitulo("Diário de um Banana 8: Maré de azar")
-                .setAutor("Jeff Kinney")
-                .setAno(2014)
-                .setEditora("VR Editora")
-                .setSinopse("Greg Heffley está bolado. Seu companheiro de todas as horas, Rowley, o abandonou, e encontrar novos amigos na escola acabou se revelando uma tarefa muito difícil.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana7 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8576834847")
+                                        .setTitulo("Diário de um Banana 7: Segurando vela")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2013)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("O Dia dos Namorados está chegando e Greg Heffley continua sozinho. Mas um baile organizado pela escola pode mudar tudo. Ele precisa encontrar uma garota urgente. Para isso, conta com a ajuda de outro solteirão, Rowley, seu melhor amigo.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/41bzTG7e+qL._SY445_SX342_.jpg"
+                        ),
+                        "Greg Heffley tenta encontrar um par para o baile de Dia dos Namorados, contando com a ajuda de seu melhor amigo, Rowley, em uma série de situações cômicas e embaraçosas."
+                ),
+                Arrays.asList("Infantil", "Romance", "Humor", "Amizade")
+        );
 
-        Livro diarioBanana9 = new LivroSimples.Builder("978-8576838234")
-                .setTitulo("Diário de um Banana 9: Caindo na estrada")
-                .setAutor("Jeff Kinney")
-                .setAno(2015)
-                .setEditora("VR Editora")
-                .setSinopse("As férias do Greg tinham tudo para serem perfeitas, até que sua mãe vem com a bomba: eles farão uma viagem de carro em família. ")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana8 = new LivroComTag(
+                new LivroComCapaAlternativa(
+                        new LivroSimples.Builder("978-8576836902")
+                                .setTitulo("Diário de um Banana 8: Maré de azar")
+                                .setAutor("Jeff Kinney")
+                                .setAno(2014)
+                                .setEditora("VR Editora")
+                                .setSinopse("Greg Heffley está bolado. Seu companheiro de todas as horas, Rowley, o abandonou, e encontrar novos amigos na escola acabou se revelando uma tarefa muito difícil.")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "https://m.media-amazon.com/images/I/716yGyLTIxL._SY385_.jpg"
+                ),
+                Arrays.asList("Infantil", "Amizade", "Humor", "Desafios")
+        );
 
-        Livro diarioBanana10 = new LivroSimples.Builder("978-8576839422")
-                .setTitulo("Diário de um Banana 10: Bons Tempos")
-                .setAutor("Jeff Kinney")
-                .setAno(2015)
-                .setEditora("VR Editora")
-                .setSinopse("Greg Heffley está prestes a descobrir que a vida era muito melhor nos velhos tempos. Com sua cidade voluntariamente 'desconectada', a vida moderna tem seus desafios.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana9 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroSimples.Builder("978-8576838234")
+                                .setTitulo("Diário de um Banana 9: Caindo na estrada")
+                                .setAutor("Jeff Kinney")
+                                .setAno(2015)
+                                .setEditora("VR Editora")
+                                .setSinopse("As férias do Greg tinham tudo para serem perfeitas, até que sua mãe vem com a bomba: eles farão uma viagem de carro em família. ")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "Greg Heffley embarca em uma hilária e desastrosa viagem de carro em família, repleta de imprevistos e situações cômicas que transformam as férias em uma grande aventura."
+                ),
+                Arrays.asList("Infantil", "Viagem", "Aventura", "Família")
+        );
 
-        Livro diarioBanana11 = new LivroSimples.Builder("978-8550700601")
-                .setTitulo("Diário de um Banana 11: Vai ou Racha")
-                .setAutor("Jeff Kinney")
-                .setAno(2016)
-                .setEditora("VR Editora")
-                .setSinopse("A pressão só aumenta para Greg Heffley. A única coisa em que ele parece ser realmente bom é em videojogos, mas a mãe quer que ele alargue os seus horizontes e faça mais alguma coisa - QUALQUER coisa! Quando o Greg encontra uma velha câmara de filmar, ele tem a certeza de que descobriu a forma ideal de, finalmente, mostrar a todos os seus grandes talentos escondidos.")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana10 = new LivroComTag(
+                new LivroSimples.Builder("978-8576839422")
+                        .setTitulo("Diário de um Banana 10: Bons Tempos")
+                        .setAutor("Jeff Kinney")
+                        .setAno(2015)
+                        .setEditora("VR Editora")
+                        .setSinopse("Greg Heffley está prestes a descobrir que a vida era muito melhor nos velhos tempos. Com sua cidade voluntariamente 'desconectada', a vida moderna tem seus desafios.")
+                        .setCategoria("Infantil")
+                        .build(),
+                Arrays.asList("Infantil", "Tecnologia", "Nostalgia", "Humor")
+        );
 
-        Livro diarioBanana12 = new LivroSimples.Builder("978-8550701448")
-                .setTitulo("Diário de um Banana 12: Apertem os cintos")
-                .setAutor("Jeff Kinney")
-                .setAno(2017)
-                .setEditora("VR Editora")
-                .setSinopse("Os Heffley estão dando o fora! Greg e sua família decidem fugir do frio e do estresse das festas de fim de ano e embarcam no primeiro avião com destino a uma ilha tropical. Mas, e se o paraíso não for tudo isso?")
-                .setCategoria("Infantil")
-                .build();
+        Livro diarioBanana11 = new LivroComTag(
+                new LivroSimples.Builder("978-8550700601")
+                        .setTitulo("Diário de um Banana 11: Vai ou Racha")
+                        .setAutor("Jeff Kinney")
+                        .setAno(2016)
+                        .setEditora("VR Editora")
+                        .setSinopse("A pressão só aumenta para Greg Heffley. A única coisa em que ele parece ser realmente bom é em videojogos, mas a mãe quer que ele alargue os seus horizontes e faça mais alguma coisa - QUALQUER coisa! Quando o Greg encontra uma velha câmara de filmar, ele tem a certeza de que descobriu a forma ideal de, finalmente, mostrar a todos os seus grandes talentos escondidos.")
+                        .setCategoria("Infantil")
+                        .build(),
+                Arrays.asList("Infantil", "Tecnologia", "Nostalgia", "Humor")
+        );
+
+        Livro diarioBanana12 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8550701448")
+                                        .setTitulo("Diário de um Banana 12: Apertem os cintos")
+                                        .setAutor("Jeff Kinney")
+                                        .setAno(2017)
+                                        .setEditora("VR Editora")
+                                        .setSinopse("Os Heffley estão dando o fora! Greg e sua família decidem fugir do frio e do estresse das festas de fim de ano e embarcam no primeiro avião com destino a uma ilha tropical. Mas, e se o paraíso não for tudo isso?")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51FEcJ30g+L._SY445_SX342_.jpg"
+                        ),
+                        "A família Heffley embarca em uma viagem de férias para uma ilha tropical, mas o que parecia um paraíso se transforma em uma série de desventuras cômicas."
+                ),
+                Arrays.asList("Infantil", "Viagem", "Férias", "Aventura")
+        );
 
         // Júlio Verne
-        Livro viagemCentroTerra = new LivroSimples.Builder("978-8595201736")
-                .setTitulo("Viagem ao Centro da Terra")
-                .setAutor("Júlio Verne")
-                .setAno(2023)
-                .setEditora("Pé da Letra")
-                .setISBN("978-8595201736")
-                .setSinopse("Axel é um jovem órfão que mora em Hamburgo com seu tio Otto Lindenbrock, um renomado cientista da área de Geologia e Mineralogia. Um dia, o cientista encontra um pergaminho escrito em linguagem misteriosa.")
-                .setCategoria("Infantil")
-                .build();
+        Livro viagemCentroTerra = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595201736")
+                                        .setTitulo("Viagem ao Centro da Terra")
+                                        .setAutor("Júlio Verne")
+                                        .setAno(2023)
+                                        .setEditora("Pé da Letra")
+                                        .setISBN("978-8595201736")
+                                        .setSinopse("Axel é um jovem órfão que mora em Hamburgo com seu tio Otto Lindenbrock, um renomado cientista da área de Geologia e Mineralogia. Um dia, o cientista encontra um pergaminho escrito em linguagem misteriosa.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51Qdy-JzXAL._SY445_SX342_.jpg"
+                        ),
+                        "Acompanhe a emocionante expedição do professor Otto Lidenbrock e seu sobrinho Axel em uma jornada subterrânea rumo ao centro do nosso planeta, descobrindo paisagens e criaturas pré-históricas."
+                ),
+                Arrays.asList("Aventura", "Ficção Científica", "Clássico", "Júlio Verne")
+        );
 
-        Livro ilhaMisteriosa = new LivroSimples.Builder("978-8595201736")
-                .setTitulo("A ilha misteriosa")
-                .setAutor("Júlio Verne")
-                .setAno(2021)
-                .setEditora("Principis")
-                .setSinopse("Depois de sequestrar um balão de um campo confederado, um grupo de cinco abolicionistas americanos cai das nuvens em uma ilha vulcânica desconhecida no oceano Pacífico.")
-                .setCategoria("Infantil")
-                .build();
-
+        Livro ilhaMisteriosa = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595201736")
+                                        .setTitulo("A ilha misteriosa")
+                                        .setAutor("Júlio Verne")
+                                        .setAno(2021)
+                                        .setEditora("Principis")
+                                        .setSinopse("Depois de sequestrar um balão de um campo confederado, um grupo de cinco abolicionistas americanos cai das nuvens em uma ilha vulcânica desconhecida no oceano Pacífico.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51F4Fs+g5oL._SY445_SX342_.jpg"
+                        ),
+                        "Um grupo de náufragos da Guerra Civil Americana se vê isolado em uma ilha deserta, onde sua engenhosidade e trabalho em equipe são postos à prova em uma luta pela sobrevivência e descoberta de mistérios."
+                ),
+                Arrays.asList("Aventura", "Sobrevivência", "Clássico", "Júlio Verne")
+        );
         // Art Spiegelman
-        Livro maus = new LivroSimples.Builder("978-8535906288")
-                .setTitulo("Maus")
-                .setAutor("Art Spiegelman")
-                .setAno(2005)
-                .setEditora("Quadrinhos na Cia")
-                .setSinopse("Maus (\"rato\", em alemão) é a história de Vladek Spiegelman, judeu polonês que sobreviveu ao campo de concentração de Auschwitz, narrada por ele próprio ao filho Art.")
-                .setCategoria("Aventura")
-                .build();
+        Livro maus = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8535906288")
+                                        .setTitulo("Maus")
+                                        .setAutor("Art Spiegelman")
+                                        .setAno(2005)
+                                        .setEditora("Quadrinhos na Cia")
+                                        .setSinopse("Maus (\"rato\", em alemão) é a história de Vladek Spiegelman, judeu polonês que sobreviveu ao campo de concentração de Auschwitz, narrada por ele próprio ao filho Art.")
+                                        .setCategoria("Aventura")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/51Ud+Rl1SaL._SY445_SX342_.jpg"
+                        ),
+                        "Uma poderosa e comovente graphic novel que narra a história real de sobrevivência de Vladek Spiegelman, um judeu polonês, durante o Holocausto, contada ao seu filho."
+                ),
+                Arrays.asList("Graphic Novel", "Holocausto", "História", "Memórias")
+        );
 
         Livro bichos = new LivroSimples.Builder("978-8535909555")
                 .setTitulo("A revolução dos bichos: Um conto de fadas")
@@ -249,54 +447,217 @@ public class Seed {
                 .setCategoria("Clássicos de Ficção")
                 .build();
         // Holly Black
-        Livro spiderwick1 = new LivroSimples.Builder("978-8532517708")
-                .setTitulo("O guia de campo: 1")
-                .setAutor("Holly Black")
-                .setAno(2004)
-                .setEditora("Rocco")
-                .setSinopse("Fadas, duendes, gnomos e seres fantásticos, podem estar do seu lado agora mesmo, então fique alerta! Há muito mais nesse mundo do que os olhos podem ver. Para divulgar essa informação, os irmãos Grace pediram que Holly Black e Tony DiTerlizzi transformassem a sua história em uma série de cinco livros.")
-                .setCategoria("Infantil")
-                .build();
 
-        Livro spiderwick2 = new LivroSimples.Builder("978-8532517715")
-                .setTitulo("Pedra da visão: 2")
-                .setAutor("Holly Black")
-                .setAno(2004)
-                .setEditora("Rocco")
-                .setSinopse("Jared e Mallory precisam salvar o irmão e ao mesmo tempo driblar todos os tipos de criaturas amedrontadoras. Eles também acabam fazendo estranhas alianças e conhecendo surpreendentes formas de vida.")
-                .setCategoria("Infantil")
-                .build();
+        Livro spiderwick1 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8532517708")
+                                        .setTitulo("As Crônicas de Spiderwick: O guia de campo")
+                                        .setAutor("Holly Black")
+                                        .setAno(2004)
+                                        .setEditora("Rocco")
+                                        .setSinopse("Fadas, duendes, gnomos e seres fantásticos, podem estar do seu lado agora mesmo, então fique alerta! Há muito mais nesse mundo do que os olhos podem ver. Para divulgar essa informação, os irmãos Grace pediram que Holly Black e Tony DiTerlizzi transformassem a sua história em uma série de cinco livros.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://rocco.com.br/wp-content/uploads/2022/12/9788532517708.jpg"
+                        ),
+                        "O primeiro volume das Crônicas de Spiderwick, onde os irmãos Grace descobrem um mundo secreto de criaturas mágicas e perigosas, revelado por um misterioso guia de campo."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Aventura", "Mundo Mágico")
+        );
 
-        Livro spiderwick3 = new LivroSimples.Builder("978-8532518798")
-                .setTitulo("Segredo de Lucinda: 3")
-                .setAutor("Holly Black")
-                .setAno(2005)
-                .setEditora("Rocco")
-                .setSinopse("Jared e Mallory precisam salvar o irmão e ao mesmo tempo driblar todos os tipos de criaturas amedrontadoras. Eles também acabam fazendo estranhas alianças e conhecendo surpreendentes formas de vida.")
-                .setCategoria("Infantil")
-                .build();
+        Livro spiderwick2 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroSimples.Builder("978-8532517715")
+                                .setTitulo("As Crônicas de Spiderwick: Pedra da visão")
+                                .setAutor("Holly Black")
+                                .setAno(2004)
+                                .setEditora("Rocco")
+                                .setSinopse("Jared e Mallory precisam salvar o irmão e ao mesmo tempo driblar todos os tipos de criaturas amedrontadoras. Eles também acabam fazendo estranhas alianças e conhecendo surpreendentes formas de vida.")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "No segundo livro das Crônicas de Spiderwick, os irmãos Grace continuam sua luta contra as criaturas do mundo mágico, fazendo alianças inesperadas para proteger seu irmão e o guia de campo."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Criaturas Mágicas", "Mistério")
+        );
 
-        Livro spiderwick4 = new LivroSimples.Builder("978-8532518804")
-                .setTitulo("A árvore de ferro: 4")
-                .setAutor("Holly Black")
-                .setAno(2005)
-                .setEditora("Rocco")
-                .setSinopse("Jared está vendo dois Simon ao mesmo tempo; enquanto um remexe a bolsa de Mallory, o outro está sentado ao lado da mãe. Para piorar a situação, eles ainda têm pela frente a arriscada missão de resgatar a irmã das garras de Korting, Mulgarath e de todos os outros seres fantásticos que exigem o Guia de Campo como recompensa.")
-                .setCategoria("Infantil")
-                .build();
+        Livro spiderwick3 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroSimples.Builder("978-8532518798")
+                                .setTitulo("As Crônicas de Spiderwick: Segredo de Lucinda")
+                                .setAutor("Holly Black")
+                                .setAno(2005)
+                                .setEditora("Rocco")
+                                .setSinopse("Jared e Mallory precisam salvar o irmão e ao mesmo tempo driblar todos os tipos de criaturas amedrontadoras. Eles também acabam fazendo estranhas alianças e conhecendo surpreendentes formas de vida.")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "O terceiro volume das Crônicas de Spiderwick revela mais segredos sobre o mundo das fadas e a família Grace, enquanto os irmãos buscam respostas e enfrentam novos perigos."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Segredos", "Magia")
+        );
 
-        Livro spiderwick5 = new LivroSimples.Builder("978-8532519993")
-                .setTitulo("A ira de Mulgarath: 5")
-                .setAutor("Holly Black")
-                .setAno(2006)
-                .setEditora("Rocco")
-                .setSinopse("Mulgarath roubou o livro mágico de Arthur Spiderwick e deseja tornar-se o mestre do mundo. Com a ajuda do gnomo Tibério, do desajeitado Gritalhão e outros seres encantados que povoam a história, conseguirão Jared, Simon e Mallory triunfar sobre as forças do mal e fazer com que o precioso guia de campo seja usado para o bem de todos?")
-                .setCategoria("Infantil")
-                .build();
+        Livro spiderwick4 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroSimples.Builder("978-8532518804")
+                                .setTitulo("A árvore de ferro: 4")
+                                .setAutor("Holly Black")
+                                .setAno(2005)
+                                .setEditora("Rocco")
+                                .setSinopse("Jared está vendo dois Simon ao mesmo tempo; enquanto um remexe a bolsa de Mallory, o outro está sentado ao lado da mãe. Para piorar a situação, eles ainda têm pela frente a arriscada missão de resgatar a irmã das garras de Korting, Mulgarath e de todos os outros seres fantásticos que exigem o Guia de Campo como recompensa.")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "No quarto livro de Spiderwick, os irmãos Grace enfrentam um novo e perigoso desafio para resgatar sua irmã, lidando com ilusões e a ameaça crescente das forças do mal."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Ilusão", "Resgate")
+        );
+
+        Livro spiderwick5 = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroSimples.Builder("978-8532519993")
+                                .setTitulo("A ira de Mulgarath: 5")
+                                .setAutor("Holly Black")
+                                .setAno(2006)
+                                .setEditora("Rocco")
+                                .setSinopse("Mulgarath roubou o livro mágico de Arthur Spiderwick e deseja tornar-se o mestre do mundo. Com a ajuda do gnomo Tibério, do desajeitado Gritalhão e outros seres encantados que povoam a história, conseguirão Jared, Simon e Mallory triunfar sobre as forças do mal e fazer com que o precioso guia de campo seja usado para o bem de todos?")
+                                .setCategoria("Infantil")
+                                .build(),
+                        "O volume final das Crônicas de Spiderwick culmina na batalha decisiva contra o terrível Mulgarath, onde os irmãos Grace devem usar toda sua coragem para proteger o mundo mágico e o guia de campo."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Batalha Final", "Aventura")
+        );
+
+        Livro entregasKiki = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-6586068221")
+                                        .setTitulo("Entregas expressas da Kiki")
+                                        .setAutor("Eiko Kadono")
+                                        .setAno(2024)
+                                        .setEditora("Estação Liberdade")
+                                        .setSinopse("A história acompanha Kiki, uma bruxinha adolescente que nunca foge de um desafio. Quando seu aniversário de treze anos chega, ela está ansiosa para seguir a tradição de uma bruxa: escolher uma nova cidade para chamar de lar por um ano. Cheia de confiança, Kiki voa para a vila costeira de Koriko e espera que seus poderes tragam facilmente alegria para os habitantes da cidade.F")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/61snp5avF9L._SY385_.jpg"
+                        ),
+                        "O consagrado romance infantojuvenil Entregas expressas da Kiki (Majo no Takkyūbin ou Kiki’s Delivery Service), de Eiko Kadono, foi publicado originalmente no Japão em 1985. Pouco tempo depois de seu lançamento, em 1989, a obra ganhou uma adaptação cinematográfica O serviço de entregas da Kiki, dirigida por Hayao Miyazaki e produzida pelo Studio Ghibli. No Brasil, o filme está disponível na Netflix. Devido ao seu grande sucesso e enorme legião de fãs, a obra ganhou continuações que envolvem o mundo de Kiki , totalizando seis livros, com seu último volume publicado em 2009."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Aventura", "Bruxa", "studio ghibli")
+        );
+
+        Livro oCasteloAnimado = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-6555872088")
+                                        .setTitulo("O castelo animado")
+                                        .setAutor("Diana Wynne Jones")
+                                        .setAno(2024)
+                                        .setEditora("Galera")
+                                        .setSinopse("Certo dia, enquanto trabalha na chapelaria da família, a jovem Sophie é surpreendida e misteriosamente amaldiçoada por uma terrível bruxa, que a transforma em uma senhora de noventa anos.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/81JPLgU-EgS._SY385_.jpg"
+                        ),
+                        "De um modo ou outro interligadas, as histórias de Diana Wynne Jones são, definitivamente, o que você precisa para escapar do mundo real e viajar para bem longe: em um tapete diferente, para uma cidade distante, refúgio de poções mágicas, personagens fantásticos e um segredo a cada esquina."
+                ),
+                Arrays.asList("Fantasia", "Infantil", "Aventura", "Sophie", "Studio ghibli")
+        );
+
+        Livro oMeuPeLaranjaLima = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8506086896")
+                                        .setTitulo("O Meu Pé de Laranja Lima")
+                                        .setAutor("José Mauro de Vasconcelos")
+                                        .setAno(2024)
+                                        .setEditora("Melhoramentos")
+                                        .setSinopse("Um clássico da literatura brasileira, com adaptações para a televisão, o cinema e o teatro, O Meu Pé de Laranja Lima é desses livros que marcam época. Lançado em 1968, trata-se de uma história fortemente autobiográfica, que demonstra a mão de um escritor experiente, ciente do efeito que pode provocar nos leitores com suas cenas e a composição de seus personagens.")
+                                        .setCategoria("Infantil")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/816a7zMD+FL._SY385_.jpg"
+                        ),
+                        "O menino vive aprontando, sem jamais se conformar com as limitações que o mundo lhe impõe – viaja com sua imaginação, brinca, explora, descobre, responde aos adultos, mete-se em confusões, causa pequenos desastres. As surras que lhe aplicam seu pai e sua irmã mais velha são seu suplício, a ponto de fazê-lo querer desistir da vida. No entanto, o apego ao mundo que criou felizmente sempre fala mais alto. Só não há remédio para a dor, para a perda."
+                ),
+                Arrays.asList("Drama", "Infantil", "Nacional", "Clássico")
+        );
+
+        Livro oSilmarillion = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595084377")
+                                        .setTitulo("O Silmarillion")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("O Silmarillion é o relato dos Dias Antigos da Primeira Era do mundo criado por J.R.R. Tolkien. É a história longínqua para a qual os personagens de O Senhor dos Anéis e O Hobbit olham para trás, e em cujos eventos alguns deles, como Elrond e Galadriel, tomaram parte.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/81MoknVer8L._SY385_.jpg"
+                        ),
+                        "Os contos de O Silmarillion se passam na época em que Morgoth, o Primeiro Senhor Sombrio, habitava a Terra-média, e os Altos-Elfos guerreavam contra ele pela recuperação das Silmarils, as joias que continham a pura luz de Valinor. O livro começa com o \"Ainulindalë\", o mito da criação do Universo, seguido pelo \"Valaquenta\", onde estão descritas a natureza e os poderes de cada um dos deuses."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Senhor dos Anéis", "Hobbit", "Tolkien")
+        );
+
+        Livro berenLuthien = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595083660")
+                                        .setTitulo("Beren e Lúthien")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("O pai dela, um grande senhor élfico, opõe-se à união e, para permitir o casamento com Lúthien, impõe a Beren uma tarefa impossível de ser realizada. É este o foco central da lenda: a tentativa incrivelmente heroica de Beren e Lúthien juntos, roubar uma Silmaril do maior de todos os seres malignos, Morgoth, o Sombrio Inimigo do Mundo.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/81MoknVer8L._SY385_.jpg"
+                        ),
+                        "Neste livro, seu filho, Christopher Tolkien, reuniu pela primeira vez as diferentes versões da lenda, escritas em diferentes épocas, em prosa ou em versos altamente musicais. Ao lado de “A Queda de Gondolin” e “Os Filhos de Húrin”, “Beren e Lúthien” era considerado por Tolkien um dos Três Grandes Contos dos Dias Antigos."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Senhor dos Anéis", "Hobbit", "Tolkien")
+        );
+
+        Livro quedaGondolin = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595083653")
+                                        .setTitulo("A queda de Gondolin")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2018)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("A Queda de Gondolin narra a trajetória de Tuor, um homem de uma casa outrora nobre, que agora tenta fugir da escravidão para buscar uma mítica e secreta cidade, da qual conhece apenas rumores.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/91GU3sXvPxL._UF894,1000_QL80_.jpg"
+                        ),
+                        "A cidade é Gondolin, o último grande refúgio élfico que ainda resiste ao domínio de Morgoth, o Sombrio Inimigo do Mundo. Deixando para atrás a servidão e sua terra natal, Tuor sente em seu íntimo que, de alguma forma, não está vagando no ermo, mas que é guiado pelos caminhos que se abrem à sua frente."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Senhor dos Anéis", "Hobbit", "Tolkien")
+        );
+
+        Livro osfilhosHurin = new LivroComTag(
+                new LivroComResumoEstendido(
+                        new LivroComCapaAlternativa(
+                                new LivroSimples.Builder("978-8595085695")
+                                        .setTitulo("Os filhos de Húrin")
+                                        .setAutor("J.R.R. Tolkien")
+                                        .setAno(2019)
+                                        .setEditora("HarperCollins")
+                                        .setSinopse("Ao ser capturado pelas forças de Morgoth, o Primeiro Senhor Sombrio, Húrin resiste às ameaças e torturas que lhe foram impostas no cativeiro e ousa zombar do líder maligno. As consequências de sua postura resoluta recaem, na forma de uma maldição, diretamente em sua família.")
+                                        .setCategoria("Fantasia")
+                                        .build(),
+                                "https://m.media-amazon.com/images/I/91tO3AZhkcL._SY385_.jpg"
+                        ),
+                        "Morwen, esposa de Húrin, mesmo grávida e sob grande perigo, envia Túrin, seu filho primogênito, para o Reino élfico de Doriath, cujo rei recebe o menino e o protege das muitas ameaças que se espalham com o avanço do poderio de Morgoth. A criança é criada como um príncipe e se torna um destemido guerreiro, que herda o temperamento arredio e severo da mãe, bem como a destreza de batalha do pai. Túrin se torna um justiceiro nas terras ermas e o grande motivo de pavor por parte dos servos de Morgoth."
+                ),
+                Arrays.asList("Fantasia", "Épico", "Senhor dos Anéis", "Hobbit", "Tolkien")
+        );
 
         // Adicionar no banco de dados
-        livroRepository.adicionar(padroeDeProjeto);
+        livroRepository.adicionar(padraoDeProjeto);
         livroRepository.adicionar(useCabecaJava);
+        livroRepository.adicionar(oCasteloAnimado);
+        livroRepository.adicionar(oMeuPeLaranjaLima);
+        livroRepository.adicionar(oHobbit);
         livroRepository.adicionar(entendendoAlgoritmos);
         livroRepository.adicionar(senhorDosAneisParte1);
         livroRepository.adicionar(senhorDosAneisParte2);
@@ -327,10 +688,70 @@ public class Seed {
         livroRepository.adicionar(spiderwick3);
         livroRepository.adicionar(spiderwick4);
         livroRepository.adicionar(spiderwick5);
+        //
+        livroRepository.adicionar(entregasKiki);
+        //Os grandes contos        
+        livroRepository.adicionar(oSilmarillion);
+        livroRepository.adicionar(quedaGondolin);
+        livroRepository.adicionar(berenLuthien);
+        livroRepository.adicionar(osfilhosHurin);
 
         ////////////////////////////////////////////////////////////////////////
-        // TODO: adicionar coleções
         System.out.println("[SEED] Criando coleções de livros...");
+        // Senhor dos Anéis
+        Colecao colecaoSenhorDosAneis = new Colecao("Senhor dos Anéis");
+        colecaoService.registrarNovaColecao(colecaoSenhorDosAneis);
+        colecaoService.registrarColecaoComLivros(colecaoSenhorDosAneis, List.of(
+                senhorDosAneisParte1,
+                senhorDosAneisParte2,
+                senhorDosAneisParte3
+        ));
+
+        // Diário de um Banana
+        Colecao colecaoDiarioBanana = new Colecao("Diário de um Banana");
+        colecaoService.registrarNovaColecao(colecaoDiarioBanana);
+        colecaoService.registrarColecaoComLivros(colecaoDiarioBanana, List.of(
+                diarioBanana1,
+                diarioBanana2,
+                diarioBanana3,
+                diarioBanana4,
+                diarioBanana5,
+                diarioBanana6,
+                diarioBanana7,
+                diarioBanana8,
+                diarioBanana9,
+                diarioBanana10,
+                diarioBanana11,
+                diarioBanana12
+        ));
+
+        // Júlio Verne
+        Colecao colecaoJulioVerne = new Colecao("Júlio Verne");
+        colecaoService.registrarNovaColecao(colecaoJulioVerne);
+        colecaoService.registrarColecaoComLivros(colecaoJulioVerne, List.of(
+                viagemCentroTerra,
+                ilhaMisteriosa
+        ));
+
+        // As Crônicas de Spiderwick
+        Colecao colecaoSpiderwick = new Colecao("As Crônicas de Spiderwick");
+        colecaoService.registrarNovaColecao(colecaoSpiderwick);
+        colecaoService.registrarColecaoComLivros(colecaoSpiderwick, List.of(
+                spiderwick1,
+                spiderwick2,
+                spiderwick3,
+                spiderwick4,
+                spiderwick5
+        ));
+
+        // Três Grandes Contos dos Dias Antigos
+        Colecao tresGrandesContosDiasAntigos = new Colecao("Três Grandes Contos dos Dias Antigos");
+        colecaoService.registrarNovaColecao(colecaoSpiderwick);
+        colecaoService.registrarColecaoComLivros(tresGrandesContosDiasAntigos, List.of(
+                quedaGondolin,
+                berenLuthien,
+                osfilhosHurin
+        ));
 
         ////////////////////////////////////////////////////////////////////////
         System.out.println("[SEED] Criando usuários...");
@@ -366,7 +787,7 @@ public class Seed {
         DataProvider.setDateTime("2025-01-01T00:00:00");
         var emp1 = new Emprestimo(leitorAna, useCabecaJava, new EmprestimoPadrao());
         DataProvider.setDateTime("2025-01-03T00:00:00");
-        var emp2 = new Emprestimo(leitorJoao, padroeDeProjeto, new EmprestimoPremium());
+        var emp2 = new Emprestimo(leitorJoao, padraoDeProjeto, new EmprestimoPremium());
         DataProvider.setDateTime("2025-01-04T00:00:00");
         var emp3 = new Emprestimo(leitorJoao, senhorDosAneisParte3, new EmprestimoPadrao());
         DataProvider.setDateTime("2025-01-10T00:00:00");
@@ -395,7 +816,7 @@ public class Seed {
         ////////////////////////////////////////////////////////////////////////
         System.out.println("[SEED] Criando reservas...");
         DataProvider.setDateTime("2025-01-02T00:00:00");
-        var res1 = new Reserva(leitorJuliana, padroeDeProjeto);
+        var res1 = new Reserva(leitorJuliana, padraoDeProjeto);
         DataProvider.setDateTime("2025-01-03T00:00:00");
         var res2 = new Reserva(leitorBianca, entendendoAlgoritmos);
         DataProvider.setDateTime("2025-01-04T00:00:00");

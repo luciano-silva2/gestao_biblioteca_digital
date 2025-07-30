@@ -1,26 +1,28 @@
 package br.edu.ifpb.gestaobibliotecadigital.views.emprestimos;
 
+import br.edu.ifpb.gestaobibliotecadigital.controllers.EmprestimoController;
 import br.edu.ifpb.gestaobibliotecadigital.filters.EmprestimoFiltro;
 import br.edu.ifpb.gestaobibliotecadigital.models.emprestimos.Emprestimo;
-import br.edu.ifpb.gestaobibliotecadigital.repositories.EmprestimoRepository;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ListaEmprestimos extends javax.swing.JFrame {
 
-    private final EmprestimoRepository emprestimoRepository = EmprestimoRepository.getInstance();
-    private List<Emprestimo> listaEmprestimos = emprestimoRepository.listar();
+    private final EmprestimoController emprestimoController = new EmprestimoController();
+    private List<Emprestimo> listaEmprestimos;
     private String pesquisa = "";
     private EmprestimoFiltro filtro = new EmprestimoFiltro();
 
     public ListaEmprestimos() {
         initComponents();
+        atualizarListaEmprestimos();
 
         // Define os dados na tabela
         tabelaEmprestimos.setDados(listaEmprestimos);
 
         // Atualiza a lista de empréstimos quando houver alguma alteração
         acoesEmprestimo.events.onUpdate(() -> {
-            listaEmprestimos = emprestimoRepository.listar();
+            atualizarListaEmprestimos();
             filtrar();
         });
 
@@ -38,19 +40,31 @@ public class ListaEmprestimos extends javax.swing.JFrame {
     }
 
     /**
+     * Atualiza a lista de empréstimos
+     */
+    private void atualizarListaEmprestimos() {
+        try {
+            listaEmprestimos = emprestimoController.listarEmprestimos();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao listar empréstimos", JOptionPane.ERROR_MESSAGE);
+            throw ex;
+        }
+    }
+
+    /**
      * Filtra a lista de empréstimos
      */
     private void filtrar() {
         EmprestimoFiltro filtroClone = (EmprestimoFiltro) filtro.clone();
-        
+
         // Define a lista completa de empréstimos no filtro
         filtroClone.setItens(listaEmprestimos);
-        
+
         // Se a caixa de pesquisa não estiver vazia, filtra
         if (!pesquisa.trim().equals("")) {
             filtroClone.pesquisar(pesquisa);
         }
-        
+
         // Atualiza a lista de empréstimos
         tabelaEmprestimos.setDados(filtroClone.filtrar());
         onItemDestacadoEmprestimos(null);

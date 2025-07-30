@@ -2,6 +2,7 @@ package br.edu.ifpb.gestaobibliotecadigital.views.usuarios;
 
 import br.edu.ifpb.gestaobibliotecadigital.views.TelaLeitor;
 import br.edu.ifpb.gestaobibliotecadigital.services.auth.LoginService;
+import br.edu.ifpb.gestaobibliotecadigital.views.TelaAdministrador;
 import javax.swing.JOptionPane;
 
 public class LoginView extends javax.swing.JFrame {
@@ -17,10 +18,10 @@ public class LoginView extends javax.swing.JFrame {
         loginButton = new javax.swing.JButton();
         cadastrarButton = new javax.swing.JButton();
         usernameInput = new javax.swing.JTextField();
-        senhaInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        senhaInput = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,15 +55,14 @@ public class LoginView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(122, 122, 122)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(usernameInput)
-                        .addComponent(cadastrarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(senhaInput)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(usernameInput)
+                    .addComponent(cadastrarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(senhaInput))
                 .addContainerGap(121, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -91,13 +91,20 @@ public class LoginView extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
         String username = usernameInput.getText();
-        String senha = senhaInput.getText();
+        String senha = new String(senhaInput.getPassword()).trim();
 
         boolean loginOk = LoginService.login(username, senha);
 
         if (loginOk) {
-            new TelaLeitor().setVisible(true);
-            this.dispose();
+            var usuario = LoginService.getUsuarioLogado();
+
+            if (usuario.getTipo().equalsIgnoreCase("Administrador")) {
+                new TelaAdministrador().setVisible(true);
+                this.dispose();
+            } else {
+                new TelaLeitor().setVisible(true);
+                this.dispose();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Credenciais inválidas", "Erro de login", JOptionPane.ERROR_MESSAGE);
         }
@@ -152,7 +159,7 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JButton loginButton;
-    private javax.swing.JTextField senhaInput;
+    private javax.swing.JPasswordField senhaInput;
     private javax.swing.JTextField usernameInput;
     // End of variables declaration//GEN-END:variables
 }

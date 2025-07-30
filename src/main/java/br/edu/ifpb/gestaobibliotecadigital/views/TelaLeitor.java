@@ -1,10 +1,12 @@
 package br.edu.ifpb.gestaobibliotecadigital.views;
 
+import br.edu.ifpb.gestaobibliotecadigital.services.auth.LoginService;
 import br.edu.ifpb.gestaobibliotecadigital.session.PermissaoProxy;
 import br.edu.ifpb.gestaobibliotecadigital.views.colecoes.ListaColecao;
 import br.edu.ifpb.gestaobibliotecadigital.views.emprestimos.ListaEmprestimos;
 import br.edu.ifpb.gestaobibliotecadigital.views.livros.ListaLivros;
 import br.edu.ifpb.gestaobibliotecadigital.views.reservas.ListaReservas;
+import br.edu.ifpb.gestaobibliotecadigital.views.usuarios.LoginView;
 
 public class TelaLeitor extends javax.swing.JFrame {
 
@@ -23,6 +25,7 @@ public class TelaLeitor extends javax.swing.JFrame {
         visualizarColecao = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        sairBotao = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Biblioteca digital");
@@ -62,6 +65,13 @@ public class TelaLeitor extends javax.swing.JFrame {
             }
         });
 
+        sairBotao.setText("Logout");
+        sairBotao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairBotaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,19 +81,21 @@ public class TelaLeitor extends javax.swing.JFrame {
                 .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(sairBotao)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                     .addComponent(visualizarLivros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(visualizarColecao, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(relatoriosText, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                .addGap(21, 21, 21))
+                .addComponent(visualizarColecao, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addGap(9, 9, 9)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(relatoriosText, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,8 +103,9 @@ public class TelaLeitor extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(usuarioPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(titulo))
-                .addGap(115, 115, 115)
+                    .addComponent(titulo)
+                    .addComponent(sairBotao))
+                .addGap(142, 142, 142)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(visualizarLivros, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(visualizarColecao, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -100,7 +113,7 @@ public class TelaLeitor extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         pack();
@@ -121,6 +134,13 @@ public class TelaLeitor extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ListaReservas().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void sairBotaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairBotaoActionPerformed
+        // TODO add your handling code here:
+        new LoginService().logout();
+        new LoginView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_sairBotaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -161,6 +181,7 @@ public class TelaLeitor extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton relatoriosText;
+    private javax.swing.JButton sairBotao;
     private javax.swing.JLabel titulo;
     private br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel usuarioPanel1;
     private javax.swing.JButton visualizarColecao;

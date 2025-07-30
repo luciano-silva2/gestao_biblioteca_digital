@@ -9,8 +9,16 @@ public class MainRelatorios{
 
         RelatorioLivrosCadastrados relatorio = new RelatorioLivrosCadastrados();
         relatorio.gerar(new PdfExportador());
+        
 
         Relatorio r = new Relatorio();
         r.livrosMaisEmprestados();
+
+        System.setProperty("java.awt.headless", "true");
+        GraficoLivrosMaisEmprestados graficoLivros = new GraficoLivrosMaisEmprestados();
+        graficoLivros.exibir(FakeDataBase.livrosMaisEmprestados());
+
+        GraficoUsuariosMaisAtivos graficoUsuarios = new GraficoUsuariosMaisAtivos();
+        graficoUsuarios.exibir(FakeDataBase.usuariosMaisAtivos());
     }
 }

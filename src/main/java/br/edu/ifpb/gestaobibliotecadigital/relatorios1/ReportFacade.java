@@ -6,8 +6,8 @@ public class ReportFacade {
         relatorio.gerar(new PdfExportador());
     }
 
-    // public void gerarRelatorioMensalCSV(){
-    //     RelatorioTemplate relatorio = new RelatorioMensal();
-    //     relatorio.gerar(new CsvExportador());
-    // }
+    public void gerarRelatorioSemanalCSV(){
+        RelatorioTemplate relatorio = new RelatorioSemanal();
+        relatorio.gerar(new CsvExportador());
+    }
 }

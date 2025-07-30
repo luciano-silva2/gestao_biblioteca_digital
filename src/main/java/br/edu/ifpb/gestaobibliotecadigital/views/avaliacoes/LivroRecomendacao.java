@@ -46,6 +46,7 @@ public class LivroRecomendacao extends javax.swing.JFrame {
         destaques = new javax.swing.JButton();
         autor = new javax.swing.JButton();
         usuarioPanel1 = new br.edu.ifpb.gestaobibliotecadigital.views.components.UsuarioPanel();
+        MaisFiltros = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,6 +88,13 @@ public class LivroRecomendacao extends javax.swing.JFrame {
             }
         });
 
+        MaisFiltros.setText("Mais Filtros Recomendação");
+        MaisFiltros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MaisFiltrosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,9 +112,11 @@ public class LivroRecomendacao extends javax.swing.JFrame {
                 .addComponent(autor)
                 .addContainerGap(27, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(59, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(MaisFiltros)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ver)
                         .addGap(45, 45, 45))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -126,7 +136,9 @@ public class LivroRecomendacao extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(ver)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ver)
+                    .addComponent(MaisFiltros))
                 .addGap(18, 18, 18))
         );
 
@@ -241,6 +253,11 @@ public class LivroRecomendacao extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_autorActionPerformed
 
+    private void MaisFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MaisFiltrosActionPerformed
+        // TODO add your handling code here:
+        new MaisRecomendacoes().setVisible(true);
+    }//GEN-LAST:event_MaisFiltrosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -268,6 +285,7 @@ public class LivroRecomendacao extends javax.swing.JFrame {
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton MaisFiltros;
     private javax.swing.JButton autor;
     private javax.swing.JButton destaques;
     private javax.swing.JScrollPane jScrollPane1;

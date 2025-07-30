@@ -26,6 +26,7 @@ public class LivroController extends Controller {
         livroService.deletar(livroDeletar);
     }
     
+    //Simulando API
     public Livro buscarLivroPorISBN(String isbn) {
         BookAPIAdapter adapter = new BookAPIAdapter();
         return adapter.buscarLivroPorISBN(isbn);
